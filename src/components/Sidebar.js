@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Nav, Collapse, Offcanvas } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -13,10 +13,24 @@ import LogoutIcon from "../Icon/LogoutIcon";
 import BoxIcon from "../Icon/BoxIcon";
 import RevenueIcon from "../Icon/RevenueIcon";
 import PlatformSuspensionIcon from "../Icon/PlatformSuspensionIcon";
+import { AuthContext } from "../states/AuthContext";
 
 const Sidebar = ({ show, onClose }) => {
   const [openRevenue, setOpenRevenue] = useState(false);
   const [openOther, setOpenOther] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+
+  const { setLoggedIn, setProfileData } = useContext(AuthContext);
+
+  const logOutHandler = () => {
+    // alert(",,,,,,,,,,,,,,,,,")
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("profileData");
+    localStorage.removeItem("loggedIn");
+    setLoggedIn(false);
+    setProfileData({});
+    navigate("/", { replace: true });
+  };
 
   const navigate = useNavigate();
   const pathname = useLocation().pathname;
@@ -53,32 +67,30 @@ const Sidebar = ({ show, onClose }) => {
         {/* Dashboard */}
         <Nav.Link
           onClick={() => handleLinkClick("/dashboard")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
-            pathname === "/dashboard"
-              ? "bg-dark text-white fw-semibold"
-              : "text-dark"
-          }`}
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname === "/dashboard"
+            || pathname === "/university-detail" || pathname === "/student-profile" ? "bg-dark text-white fw-semibold"
+            : "text-dark"
+            }`}
         >
-          <DashboardIcon color={pathname === "/dashboard" ? "#fff" : "#292D32"} />
+          <DashboardIcon color={pathname === "/dashboard" || pathname === "/university-detail" || pathname === "/student-profile" ? "#fff" : "#292D32"} />
           Dashboard
         </Nav.Link>
 
 
         {/* user list */}
-        <Nav.Link
+        {/* <Nav.Link
           onClick={() => handleLinkClick("/user-list")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
-            pathname.startsWith("/user-list")
-              ? "bg-dark text-white fw-semibold"
-              : "text-dark"
-          }`}
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/user-list")
+            ? "bg-dark text-white fw-semibold"
+            : "text-dark"
+            }`}
         >
           <ContractIcon color={pathname.startsWith("/user-list") ? "#fff" : "#292D32"} />
           User List
-        </Nav.Link>
+        </Nav.Link> */}
 
         {/* University */}
-        <Nav.Link
+        {/* <Nav.Link
           onClick={() => handleLinkClick("/university")}
           className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
             pathname.startsWith("/university")
@@ -88,7 +100,7 @@ const Sidebar = ({ show, onClose }) => {
         >
           <ProjectIcon color={pathname.startsWith("/university") ? "#fff" : "#292D32"} />
           University
-        </Nav.Link>
+        </Nav.Link> */}
 
         <hr />
 
@@ -104,7 +116,7 @@ const Sidebar = ({ show, onClose }) => {
 
         {/* Logout (Static) */}
         <Nav.Link
-          onClick={() => handleLinkClick("/")}
+          onClick={logOutHandler}
           className="d-flex align-items-center gap-3 px-4 py-3 text-dark"
         >
           <LogoutIcon />

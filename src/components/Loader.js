@@ -7,8 +7,8 @@ export const Loader = ({ show = true }) => {
             {show &&
                 <div className='MainLoader' style={{
                     position: 'fixed',
-                    top:0,
-                    left:0,
+                    top: 0,
+                    left: 0,
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -17,7 +17,7 @@ export const Loader = ({ show = true }) => {
                     height: '100vh',
                     zIndex: 9999
                 }}>
-                    <Spinner animation="border" size="lg" style={{color: "white" }} />
+                    <Spinner animation="border" size="lg" style={{ color: "white" }} />
                 </div>
             }
         </>

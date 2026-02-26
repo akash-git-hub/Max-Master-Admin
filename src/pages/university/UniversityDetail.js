@@ -1,13 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Table } from "react-bootstrap";
 import Sidebar from "../../components/Sidebar";
 import EyeIcon from "../../Icon/EyeIcon";
 import LogoutIcon from "../../Icon/LogoutIcon";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const UniversityDetail = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [showSidebar, setShowSidebar] = useState(false);
+    const [universityDetail, setUniversityDetail] = useState({});
+
+
 
     const projectsData = [
         {
@@ -54,9 +58,34 @@ const UniversityDetail = () => {
         },
     ];
 
+
+    useEffect(() => {
+        const data = location?.state?.data;
+        const universityData = {
+            "id": data?.id,
+            "name": data?.name,
+            "thumbnail": data?.thumbnail,
+            "contact_person": data?.contact_person,
+            "contact_number": data?.contact_number,
+            "no_of_license": data?.no_of_license,
+            "full_address": data?.full_address,
+            "country": data?.country,
+            "state": data?.state,
+            "city": data?.city,
+            "postal_code": data?.postal_code,
+            "longitude": data?.longitude,
+            "latitude": data?.longitude,
+            "createdAt": data?.createdAt,
+            "email": data?.user?.email,
+            "first_name": data?.user?.first_name
+        }
+        setUniversityDetail(universityData)
+    }, [location]);
+
     const handleRowClick = (id) => {
-        navigate("/university-detail");
+        navigate("/student-profile");
     };
+
 
     return (
         <div className="d-md-flex gap-3">
@@ -77,7 +106,7 @@ const UniversityDetail = () => {
 
                                 {/* Left Image */}
                                 <img
-                                    src="/university-avatar.png"
+                                    src={universityDetail?.thumbnail}
                                     alt="University"
                                     className="rounded-4"
                                     style={{ width: "100px", height: "100px", objectFit: "cover" }}
@@ -87,7 +116,7 @@ const UniversityDetail = () => {
                                 <div className="ms-4 flex-grow-1">
 
                                     <div className="d-flex justify-content-between align-items-center">
-                                        <h4 className="mb-1 fw-bold">RGPV University</h4>
+                                        <h4 className="mb-1 fw-bold">{universityDetail?.name}</h4>
 
                                         {/* Rating */}
                                         <div className="text-warning">
@@ -95,12 +124,12 @@ const UniversityDetail = () => {
                                         </div>
                                     </div>
 
-                                    <p className="mb-1 text-muted text-start">rgpv@gmail.com</p>
+                                    <p className="mb-1 text-muted text-start">{universityDetail?.email}</p>
 
                                     <p className="mb-0 text-muted text-start">
-                                        1341 Poplar Street, Bhopal, India, 60606
+                                        {universityDetail?.full_address}
                                         <br />
-                                        +91-8989786510
+                                        {universityDetail?.contact_number}
                                     </p>
 
                                 </div>
@@ -110,7 +139,7 @@ const UniversityDetail = () => {
                         <Row>
                             <Col>
                                 <div className="table_body">
-                                    <h4 className="fw-bold mb-3 text-start">University List</h4>
+                                    <h4 className="fw-bold mb-3 text-start">Student List</h4>
 
                                     <div
                                         className="table-responsive rounded-4"
