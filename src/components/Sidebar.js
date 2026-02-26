@@ -90,17 +90,29 @@ const Sidebar = ({ show, onClose }) => {
         </Nav.Link> */}
 
         {/* University */}
-        {/* <Nav.Link
-          onClick={() => handleLinkClick("/university")}
+        <Nav.Link
+          onClick={() => handleLinkClick("/university-list")}
           className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
-            pathname.startsWith("/university")
+            pathname.startsWith("/university-list")
               ? "bg-dark text-white fw-semibold"
               : "text-dark"
           }`}
         >
-          <ProjectIcon color={pathname.startsWith("/university") ? "#fff" : "#292D32"} />
+          <ProjectIcon color={pathname.startsWith("/university-list") ? "#fff" : "#292D32"} />
           University
-        </Nav.Link> */}
+        </Nav.Link>
+
+        <Nav.Link
+          onClick={() => handleLinkClick("/module-list")}
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
+            pathname.startsWith("/module-list")
+              ? "bg-dark text-white fw-semibold"
+              : "text-dark"
+          }`}
+        >
+          <BoxIcon color={pathname.startsWith("/module-list") ? "#fff" : "#292D32"} />
+          Modules
+        </Nav.Link>
 
         <hr />
 
