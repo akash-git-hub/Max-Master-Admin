@@ -92,23 +92,21 @@ const Sidebar = ({ show, onClose }) => {
         {/* University */}
         <Nav.Link
           onClick={() => handleLinkClick("/university-list")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
-            pathname.startsWith("/university-list")
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname === "/university-list" || pathname === "/create-university"
               ? "bg-dark text-white fw-semibold"
               : "text-dark"
-          }`}
+            }`}
         >
-          <ProjectIcon color={pathname.startsWith("/university-list") ? "#fff" : "#292D32"} />
+          <ProjectIcon color={pathname === "/university-list" || pathname === "/create-university" ? "#fff" : "#292D32"} />
           University
         </Nav.Link>
 
         <Nav.Link
           onClick={() => handleLinkClick("/module-list")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
-            pathname.startsWith("/module-list")
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/module-list")
               ? "bg-dark text-white fw-semibold"
               : "text-dark"
-          }`}
+            }`}
         >
           <BoxIcon color={pathname.startsWith("/module-list") ? "#fff" : "#292D32"} />
           Modules

@@ -1,33 +1,192 @@
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import { useState } from "react";
 import Sidebar from "../../components/Sidebar";
-import { BoxIcon, LocationEditIcon, PhoneIcon, UserIcon } from "lucide-react";
+import { BoxIcon, ImageIcon, LocationEditIcon, PhoneIcon, Upload, UserIcon } from "lucide-react";
 import { InputField } from "../../components/InputField";
 import AddUserIcon from "../../Icon/AddUserIcon";
 import MailIcon from "../../Icon/MailIcon";
 import ShieldIcon from "../../Icon/ShieldIcon";
 import EyeIcon from "../../Icon/EyeIcon";
 import LicenseIcon from "../../Icon/LicenseIcon";
+import { useNavigate } from "react-router-dom";
+import { errorAlert, successAlert } from "../../components/Alert";
+import { SharedButton } from "../../components/SharedButton";
+import { AddressAutocomplete } from "../../components/AddressAutocomplete";
+import { addUniversity } from "../../services/NetworkCall";
 
 
 
 const CreateUniversity = () => {
     const [showSidebar, setShowSidebar] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate()
+    // const [modules, setModules] = useState([]);
+    const [inData, setInData] = useState({
+        "name": "",
+        "email": "",
+        // "password": "",
+        "contact_person": "",
+        "contact_number": "",
+        "no_of_license": 1,
+        "thumbnail": null,
+        // "modules": [],
+        "full_address": "",
+        "country": "",
+        "state": "",
+        "city": "",
+        "postal_code": "",
+        "longitude": "",
+        "latitude": ""
+    })
 
-    const [formData, setFormData] = useState({
-        name: "",
-        location: "",
-        email: "",
-        password: "",
-        contact: "",
-        modules: "",
-        license: "",
-    });
+    const [error, setError] = useState({
+        "name": "",
+        "email": "",
+        // "password": "",
+        "contact_person": "",
+        "contact_number": "",
+        "no_of_license": "",
+        // "modules": "",
+        "full_address": "",
+        "thumbnail": ""
+    })
 
-    const handleChange = (e) => {
+
+    // const fetchModules = async () => {
+    //   setLoading(true);
+
+    //   const res = await getModulesAPI();
+
+    //   if (res.success && Array.isArray(res.data)) {
+    //     const mData = res.data.map(d => ({ label: d?.name, value: d?.id }));
+    //     setModules(mData);
+    //   } else {
+    //     errorAlert({ message: res?.message || "Failed to fetch modules" });
+    //   }
+    //   setLoading(false);
+    // };
+
+
+    // useEffect(() => {
+    //   fetchModules();
+    // }, []);
+
+
+    const inputHandler = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+        setInData((pre) => ({ ...pre, [name]: value }));
+        setError((pre) => ({ ...pre, [name]: "" }));
+        // if (name === "password") {
+        //   const validationError = validatePassword(value);
+        //   setError((pre) => ({ ...pre, [name]: validationError }));
+        // } else {
+        //   setError((pre) => ({ ...pre, [name]: "" }));
+        // }
+
+    }
+
+
+    // const handleModuleSelect = (selectedOptions) => {
+    //   setInData((prev) => { return { ...prev, modules: selectedOptions } });
+    //   setError((pre) => ({ ...pre, "modules": "" }));
+    // }
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        let isValid = true;
+
+        // 🔹 clear previous errors
+        setError({});
+
+        const {
+            name,
+            email,
+            contact_number,
+            contact_person,
+            full_address,
+            country,
+            state,
+            city,
+            postal_code,
+            latitude,
+            longitude,
+            no_of_license,
+            thumbnail
+        } = inData;
+
+        if (!thumbnail) {
+            setError(prev => ({ ...prev, thumbnail: "Required!" }));
+            isValid = false;
+        }
+
+
+        if (!name) {
+            setError(prev => ({ ...prev, name: "Required!" }));
+            isValid = false;
+        }
+
+        if (!email) {
+            setError(prev => ({ ...prev, email: "Required!" }));
+            isValid = false;
+        }
+
+        if (!contact_number) {
+            setError(prev => ({ ...prev, contact_number: "Required!" }));
+            isValid = false;
+        }
+
+        if (!contact_person) {
+            setError(prev => ({ ...prev, contact_person: "Required!" }));
+            isValid = false;
+        }
+
+        if (!full_address) {
+            setError(prev => ({ ...prev, full_address: "Required!" }));
+            isValid = false;
+        }
+
+        if (!no_of_license) {
+            setError(prev => ({ ...prev, no_of_license: "Required!" }));
+            isValid = false;
+        }
+
+
+        if (!isValid) return;
+        setLoading(true);
+        //FormData
+        const formData = new FormData();
+
+        formData.append("name", name);
+        formData.append("email", email);
+        formData.append("contact_number", contact_number);
+        formData.append("contact_person", contact_person);
+        formData.append("full_address", full_address);
+        formData.append("country", country);
+        formData.append("state", state);
+        formData.append("city", city);
+        formData.append("postal_code", postal_code);
+        formData.append("latitude", latitude);
+        formData.append("longitude", longitude);
+        formData.append("no_of_license", no_of_license);
+
+        if (thumbnail) {
+            formData.append("thumbnail", thumbnail); // ✅ FILE
+        }
+
+        const res = await addUniversity(formData);
+
+        if (res.success) {
+            successAlert({ message: res?.message });
+            navigate("/university-account");
+        } else {
+            errorAlert({ message: res?.message });
+        }
+        setLoading(false);
+
     };
+
 
     return (
         <div className="d-md-flex gap-3">
@@ -48,8 +207,9 @@ const CreateUniversity = () => {
                                 <InputField
                                     FormLabel="Name"
                                     name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
+                                    error={error.name}
+                                    value={inData.name}
+                                    onChange={inputHandler}
                                     startIcon={<AddUserIcon />}
                                     FormPlaceHolder="M1"
                                 />
@@ -57,13 +217,21 @@ const CreateUniversity = () => {
 
                             {/* Location */}
                             <Col md={4}>
-                                <InputField
-                                    FormLabel="Location"
-                                    name="location"
-                                    value={formData.location}
-                                    onChange={handleChange}
-                                    startIcon={<LocationEditIcon />}
-                                    FormPlaceHolder="Enter location"
+                                <AddressAutocomplete
+                                    error={error?.full_address}
+                                    label="Location"
+                                    value={inData.full_address}
+                                    onSelect={(address) => {
+                                        setInData((prev) => ({
+                                            ...prev,
+                                            ...address,
+                                        }));
+
+                                        setError((prev) => ({
+                                            ...prev,
+                                            full_address: "",
+                                        }));
+                                    }}
                                 />
                             </Col>
 
@@ -72,23 +240,11 @@ const CreateUniversity = () => {
                                 <InputField
                                     FormLabel="Email address"
                                     name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
+                                    value={inData.email}
+                                    onChange={inputHandler}
+                                    error={error.email}
                                     startIcon={<MailIcon />}
                                     FormPlaceHolder="Enter email"
-                                />
-                            </Col>
-
-                            {/* Password */}
-                            <Col md={4}>
-                                <InputField
-                                    FormLabel="Password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    startIcon={<ShieldIcon />}
-                                    endIcon={<EyeIcon />}
-                                    FormPlaceHolder="Enter password"
                                 />
                             </Col>
 
@@ -96,16 +252,16 @@ const CreateUniversity = () => {
                             <Col md={4}>
                                 <InputField
                                     FormLabel="Contact Number"
-                                    name="contact"
-                                    value={formData.contact}
-                                    onChange={handleChange}
+                                    name="contact_number"
+                                    value={inData.contact_number}
+                                    onChange={inputHandler}
                                     startIcon={<PhoneIcon />}
                                     FormPlaceHolder="Enter contact"
                                 />
                             </Col>
 
                             {/* Modules */}
-                            <Col md={4}>
+                            {/* <Col md={4}>
                                 <InputField
                                     FormLabel="Modules"
                                     name="modules"
@@ -114,15 +270,16 @@ const CreateUniversity = () => {
                                     startIcon={<BoxIcon />}
                                     FormPlaceHolder="Module A, Module B"
                                 />
-                            </Col>
+                            </Col> */}
 
                             {/* License */}
                             <Col md={4}>
                                 <InputField
                                     FormLabel="NO of license"
                                     name="license"
-                                    value={formData.license}
-                                    onChange={handleChange}
+                                    error={error.no_of_license}
+                                    value={inData.no_of_license}
+                                    onChange={inputHandler}
                                     startIcon={<LicenseIcon />}
                                     FormPlaceHolder="10"
                                 />
@@ -133,7 +290,7 @@ const CreateUniversity = () => {
                         {/* Button */}
                         <div className="mt-4 w-25">
                             <Button
-                            className="w-100"
+                                className="w-100"
                                 variant="dark"
                                 size="md"
                                 style={{
@@ -144,7 +301,7 @@ const CreateUniversity = () => {
                                     fontWeight: 600
                                 }}
                             >
-                                Generate
+                                Submit
                             </Button>
                         </div>
                     </div>
