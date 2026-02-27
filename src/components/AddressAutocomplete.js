@@ -3,6 +3,7 @@ import { Form, InputGroup } from "react-bootstrap";
 import { LocationEditIcon } from "lucide-react";
 
 export const AddressAutocomplete = ({
+    label ="",
     placeholder = "Enter Address",
     value = "",
     onSelect,
@@ -48,14 +49,14 @@ export const AddressAutocomplete = ({
 
     return (
         <Form.Group>
-            {/* {label && (
+            {label && (
                 <Form.Label>
                     {label}
                     {required && <span className="text-danger ms-1">*</span>}
                 </Form.Label>
-            )}  */}
+            )} 
             <InputGroup>
-                <InputGroup.Text className='Input-Group-Icon start-0 rounded-start'>
+                <InputGroup.Text className='Input-Group-Icon start-0 rounded-start border-0'>
                     <LocationEditIcon />
                 </InputGroup.Text>
                 <Form.Control

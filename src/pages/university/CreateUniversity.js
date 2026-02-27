@@ -13,6 +13,7 @@ import { errorAlert, successAlert } from "../../components/Alert";
 import { SharedButton } from "../../components/SharedButton";
 import { AddressAutocomplete } from "../../components/AddressAutocomplete";
 import { addUniversity } from "../../services/NetworkCall";
+import AttachmentUpload from "../../components/AttachmentUpload";
 
 
 
@@ -200,6 +201,7 @@ const CreateUniversity = () => {
 
                     {/* Form Box */}
                     <div className="p-4 rounded-4 text-start">
+                        <AttachmentUpload />
                         <Row className="g-4">
 
                             {/* Name */}
@@ -260,17 +262,16 @@ const CreateUniversity = () => {
                                 />
                             </Col>
 
-                            {/* Modules */}
-                            {/* <Col md={4}>
+                            <Col md={4}>
                                 <InputField
-                                    FormLabel="Modules"
+                                    FormLabel="Contact Person"
                                     name="modules"
-                                    value={formData.modules}
-                                    onChange={handleChange}
+                                    value={inData.contact_person}
+                                    // onChange={handleChange}
                                     startIcon={<BoxIcon />}
-                                    FormPlaceHolder="Module A, Module B"
+                                    FormPlaceHolder="Contact Person"
                                 />
-                            </Col> */}
+                            </Col>
 
                             {/* License */}
                             <Col md={4}>
