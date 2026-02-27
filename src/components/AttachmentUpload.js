@@ -1,7 +1,10 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 
-const AttachmentUpload = () => {
+const AttachmentUpload = ({
+  multiple = false,
+  onFilesChange,
+}) => {
   const fileInputRef = useRef(null);
   const [files, setFiles] = useState([]);
 
@@ -12,24 +15,57 @@ const AttachmentUpload = () => {
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
 
-    const imageFiles = selectedFiles.map((file) => ({
+    const formattedFiles = selectedFiles.map((file) => ({
       file,
       preview: URL.createObjectURL(file),
+      type: file.type,
     }));
 
-    setFiles((prev) => [...prev, ...imageFiles]);
+    let updatedFiles;
+
+    if (multiple) {
+      updatedFiles = [...files, ...formattedFiles];
+    } else {
+      // Replace existing file if single mode
+      files.forEach((f) => URL.revokeObjectURL(f.preview));
+      updatedFiles = formattedFiles.slice(0, 1);
+    }
+
+    setFiles(updatedFiles);
+
+    // Send raw File objects to parent
+    onFilesChange(
+      multiple
+        ? updatedFiles.map((f) => f.file)
+        : updatedFiles[0]?.file || null
+    );
   };
+
+  const handleRemove = (index) => {
+    const updated = [...files];
+    URL.revokeObjectURL(updated[index].preview);
+    updated.splice(index, 1);
+    setFiles(updated);
+
+    onFilesChange(
+      multiple
+        ? updated.map((f) => f.file)
+        : null
+    );
+  };
+
+  useEffect(() => {
+    return () => {
+      files.forEach((file) => URL.revokeObjectURL(file.preview));
+    };
+  }, []);
 
   return (
     <div>
-      <h6 className="mb-3 text-start">Attachment</h6>
-
       <Row className="g-3 align-items-center mb-4">
-        {/* Upload Box */}
         <Col xs="auto">
           <div
             onClick={handleUploadClick}
-            className="d-flex flex-column justify-content-center align-items-center text-center"
             style={{
               width: "140px",
               height: "140px",
@@ -37,48 +73,84 @@ const AttachmentUpload = () => {
               borderRadius: "16px",
               cursor: "pointer",
               background: "#f5f5f5",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              textAlign: "center"
             }}
           >
-            <div style={{ fontSize: "14px", fontWeight: 500 }}>
-              Upload
-            </div>
-            <small>PDF, Video, PNG</small>
+            Upload
           </div>
 
           <input
             type="file"
-            multiple
+            multiple={multiple}
             ref={fileInputRef}
             onChange={handleFileChange}
             hidden
           />
         </Col>
 
-        {/* Preview Images */}
-        {files.length > 0 &&
-          files.map((item, index) => (
-            <Col xs="auto" key={index}>
+        {files.map((item, index) => (
+          <Col xs="auto" key={index}>
+            <div
+              style={{
+                width: "140px",
+                height: "140px",
+                borderRadius: "16px",
+                overflow: "hidden",
+                position: "relative",
+                background: "#f1f1f1",
+              }}
+            >
               <div
+                onClick={() => handleRemove(index)}
                 style={{
-                  width: "140px",
-                  height: "140px",
-                  borderRadius: "16px",
-                  overflow: "hidden",
-                  background: "#f1f1f1",
+                  position: "absolute",
+                  top: 6,
+                  right: 6,
+                  background: "#000",
+                  color: "#fff",
+                  width: 22,
+                  height: 22,
+                  borderRadius: "50%",
+                  fontSize: 12,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  cursor: "pointer",
+                  zIndex: 2,
                 }}
               >
+                ✕
+              </div>
+
+              {item.type.startsWith("image") && (
                 <img
                   src={item.preview}
-                  alt="preview"
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectFit: "cover",
-                  }}
+                  alt=""
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
-              </div>
-            </Col>
-          ))}
+              )}
+
+              {item.type.startsWith("video") && (
+                <video
+                  src={item.preview}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              )}
+
+              {item.type === "application/pdf" && (
+                <iframe
+                  src={item.preview}
+                  width="100%"
+                  height="100%"
+                  title="pdf"
+                />
+              )}
+            </div>
+          </Col>
+        ))}
       </Row>
     </div>
   );

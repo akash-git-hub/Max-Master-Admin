@@ -14,6 +14,7 @@ import { SharedButton } from "../../components/SharedButton";
 import { AddressAutocomplete } from "../../components/AddressAutocomplete";
 import { addUniversity } from "../../services/NetworkCall";
 import AttachmentUpload from "../../components/AttachmentUpload";
+import { Loader } from "../../components/Loader";
 
 
 
@@ -180,7 +181,7 @@ const CreateUniversity = () => {
 
         if (res.success) {
             successAlert({ message: res?.message });
-            navigate("/university-account");
+            navigate("/university-list");
         } else {
             errorAlert({ message: res?.message });
         }
@@ -190,126 +191,141 @@ const CreateUniversity = () => {
 
 
     return (
-        <div className="d-md-flex gap-3">
-            <Sidebar show={showSidebar} onClose={() => setShowSidebar(false)} />
+        <>
+            <Loader show={loading} />
+            <div className="d-md-flex gap-3">
+                <Sidebar show={showSidebar} onClose={() => setShowSidebar(false)} />
 
-            <div className="flex-grow-1">
-                <Container fluid className="p-4 bg-white rounded-4 min-vh-100">
+                <div className="flex-grow-1">
+                    <Container fluid className="p-4 bg-white rounded-4 min-vh-100">
 
-                    <h3 className="fw-bold mb-0 text-start">Create University Account</h3>
+                        <h3 className="fw-bold mb-0 text-start">Create University Account</h3>
 
-
-                    {/* Form Box */}
-                    <div className="p-4 rounded-4 text-start">
-                        <AttachmentUpload />
-                        <Row className="g-4">
-
-                            {/* Name */}
-                            <Col md={4}>
-                                <InputField
-                                    FormLabel="Name"
-                                    name="name"
-                                    error={error.name}
-                                    value={inData.name}
-                                    onChange={inputHandler}
-                                    startIcon={<AddUserIcon />}
-                                    FormPlaceHolder="M1"
-                                />
-                            </Col>
-
-                            {/* Location */}
-                            <Col md={4}>
-                                <AddressAutocomplete
-                                    error={error?.full_address}
-                                    label="Location"
-                                    value={inData.full_address}
-                                    onSelect={(address) => {
+                        <Form onSubmit={handleSubmit}>
+                            {/* Form Box */}
+                            <div className="p-4 rounded-4 text-start">
+                                <AttachmentUpload
+                                    multiple={false}
+                                    onFilesChange={(file) => {
                                         setInData((prev) => ({
                                             ...prev,
-                                            ...address,
-                                        }));
-
-                                        setError((prev) => ({
-                                            ...prev,
-                                            full_address: "",
+                                            thumbnail: file,
                                         }));
                                     }}
                                 />
-                            </Col>
+                                <Row className="g-4">
 
-                            {/* Email */}
-                            <Col md={4}>
-                                <InputField
-                                    FormLabel="Email address"
-                                    name="email"
-                                    value={inData.email}
-                                    onChange={inputHandler}
-                                    error={error.email}
-                                    startIcon={<MailIcon />}
-                                    FormPlaceHolder="Enter email"
-                                />
-                            </Col>
+                                    {/* Name */}
+                                    <Col md={4}>
+                                        <InputField
+                                            FormLabel="Name"
+                                            name="name"
+                                            error={error.name}
+                                            value={inData.name}
+                                            onChange={inputHandler}
+                                            startIcon={<AddUserIcon />}
+                                            FormPlaceHolder="M1"
+                                        />
+                                    </Col>
 
-                            {/* Contact */}
-                            <Col md={4}>
-                                <InputField
-                                    FormLabel="Contact Number"
-                                    name="contact_number"
-                                    value={inData.contact_number}
-                                    onChange={inputHandler}
-                                    startIcon={<PhoneIcon />}
-                                    FormPlaceHolder="Enter contact"
-                                />
-                            </Col>
+                                    {/* Location */}
+                                    <Col md={4}>
+                                        <AddressAutocomplete
+                                            error={error?.full_address}
+                                            label="Location"
+                                            value={inData.full_address}
+                                            onSelect={(address) => {
+                                                setInData((prev) => ({
+                                                    ...prev,
+                                                    ...address,
+                                                }));
 
-                            <Col md={4}>
-                                <InputField
-                                    FormLabel="Contact Person"
-                                    name="modules"
-                                    value={inData.contact_person}
-                                    // onChange={handleChange}
-                                    startIcon={<BoxIcon />}
-                                    FormPlaceHolder="Contact Person"
-                                />
-                            </Col>
+                                                setError((prev) => ({
+                                                    ...prev,
+                                                    full_address: "",
+                                                }));
+                                            }}
+                                        />
+                                    </Col>
 
-                            {/* License */}
-                            <Col md={4}>
-                                <InputField
-                                    FormLabel="NO of license"
-                                    name="license"
-                                    error={error.no_of_license}
-                                    value={inData.no_of_license}
-                                    onChange={inputHandler}
-                                    startIcon={<LicenseIcon />}
-                                    FormPlaceHolder="10"
-                                />
-                            </Col>
+                                    {/* Email */}
+                                    <Col md={4}>
+                                        <InputField
+                                            FormLabel="Email address"
+                                            name="email"
+                                            value={inData.email}
+                                            onChange={inputHandler}
+                                            error={error.email}
+                                            startIcon={<MailIcon />}
+                                            FormPlaceHolder="Enter email"
+                                        />
+                                    </Col>
 
-                        </Row>
+                                    {/* Contact */}
+                                    <Col md={4}>
+                                        <InputField
+                                            FormLabel="Contact Number"
+                                            name="contact_number"
+                                            value={inData.contact_number}
+                                            onChange={inputHandler}
+                                            error={error.contact_number}
+                                            startIcon={<PhoneIcon />}
+                                            FormPlaceHolder="Enter contact"
+                                        />
+                                    </Col>
 
-                        {/* Button */}
-                        <div className="mt-4 w-25">
-                            <Button
-                                className="w-100"
-                                variant="dark"
-                                size="md"
-                                style={{
-                                    border: "none",
-                                    padding: "14px 60px",
-                                    borderRadius: "30px",
-                                    fontSize: 16,
-                                    fontWeight: 600
-                                }}
-                            >
-                                Submit
-                            </Button>
-                        </div>
-                    </div>
+                                    <Col md={4}>
+                                        <InputField
+                                            FormLabel="Contact Person"
+                                            name="contact_person"
+                                            error={error.contact_person}
+                                            value={inData.contact_person}
+                                            onChange={inputHandler}
+                                            startIcon={<BoxIcon />}
+                                            FormPlaceHolder="Contact Person"
+                                        />
+                                    </Col>
 
-                </Container>
+                                    {/* License */}
+                                    <Col md={4}>
+                                        <InputField
+                                            FormLabel="No of license"
+                                            name="no_of_license"
+                                            error={error.no_of_license}
+                                            value={inData.no_of_license}
+                                            onChange={inputHandler}
+                                            startIcon={<LicenseIcon />}
+                                            FormPlaceHolder="10"
+                                        />
+                                    </Col>
+
+                                </Row>
+
+                                {/* Button */}
+                                <div className="mt-4 w-25">
+                                    <Button
+                                        type="submit"
+                                        className="w-100"
+                                        variant="dark"
+                                        size="md"
+                                        style={{
+                                            border: "none",
+                                            padding: "14px 60px",
+                                            borderRadius: "30px",
+                                            fontSize: 16,
+                                            fontWeight: 600
+                                        }}
+                                    >
+                                        Submit
+                                    </Button>
+                                </div>
+                            </div>
+                        </Form>
+                    </Container>
+                </div>
             </div>
-        </div>
+        </>
+
     );
 };
 
