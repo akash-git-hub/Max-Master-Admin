@@ -93,7 +93,7 @@ const Login = () => {
                         <div className="login-body">
                             <div className="d-flex justify-content-start w-100">
                             <Image
-                                src="/assets/Images/Max-Logo.png"
+                                src="assets/Images/Max-Logo.png"
                                 alt="Max Logo"
                                 width={200}
                                 height={50}
