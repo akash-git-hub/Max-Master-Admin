@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "react-bootstrap";
 
-export const SharedButton = ({ BtnClick, BtnLabel, BtnType, BtnVariant, BtnClass, BtnTitle }) => {
+export const SharedButton = ({ BtnClick, BtnLabel, BtnType, BtnVariant, BtnClass, BtnTitle ,BtnSize}) => {
     return (
         <Button 
          title={BtnTitle}
@@ -9,6 +9,7 @@ export const SharedButton = ({ BtnClick, BtnLabel, BtnType, BtnVariant, BtnClass
          variant={BtnVariant} 
          onClick={BtnClick}
          className={`rounded-pill ${BtnClass}`}
+         size={BtnSize}
          >
             {BtnLabel}
         </Button>

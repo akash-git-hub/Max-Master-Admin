@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Container, Row, Col, Form, Button, Stack } from "react-bootstrap";
+import { Container, Row, Col, Form, Button, Stack, Image } from "react-bootstrap";
 import { InputField } from "../components/InputField";
 import { Checkbox } from "../components/Checkbox";
 import MailIcon from "../Icon/MailIcon";
@@ -91,11 +91,14 @@ const Login = () => {
                 <Row className="justify-content-center align-items-center min-vh-100">
                     <Col xs={11} sm={8} md={6} lg={4} xl={4} className="text-center">
                         <div className="login-body">
-                            <img
-                                src="/assets/Images/Max_Logo.png"
+                            <div className="d-flex justify-content-start w-100">
+                            <Image
+                                src="/assets/Images/Max-Logo.png"
                                 alt="Max Logo"
+                                width={200}
+                                height={50}
                                 className="login-logo mb-3"
-                            />
+                            /></div>
                             <h2 className="login-title mb-4">LOGIN</h2>
 
                             <Form onSubmit={submitHandler}>

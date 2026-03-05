@@ -4,6 +4,7 @@ import { Row, Col } from "react-bootstrap";
 const AttachmentUpload = ({
   multiple = false,
   onFilesChange,
+  accept,
 }) => {
   const fileInputRef = useRef(null);
   const [files, setFiles] = useState([]);
@@ -87,6 +88,7 @@ const AttachmentUpload = ({
             multiple={multiple}
             ref={fileInputRef}
             onChange={handleFileChange}
+            accept={accept}
             hidden
           />
         </Col>

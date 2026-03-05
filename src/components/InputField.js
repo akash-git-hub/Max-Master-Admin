@@ -57,7 +57,7 @@ export const InputField = ({
 
 
     return (
-        <Form.Group className='position-relative w-100'>
+        <Form.Group className='position-relative w-100  text-start'>
             {FormLabel && (<Form.Label>{FormLabel} {required ? <small className='error text-danger'>*</small> : ""}</Form.Label>)}
             {FormType === 'date' ? (
                 readOnly === false ? (<>
@@ -90,7 +90,7 @@ export const InputField = ({
             ) : (
                 <InputGroup>
                     {startIcon && (
-                        <InputGroup.Text className="Input-Group-Icon border-0">
+                        <InputGroup.Text className="Input-Group-Icon align-items-start border-0">
                             {startIcon}
                         </InputGroup.Text>
                     )}

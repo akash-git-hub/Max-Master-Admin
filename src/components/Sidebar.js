@@ -1,5 +1,5 @@
 import { useContext, useState } from "react";
-import { Nav, Collapse, Offcanvas } from "react-bootstrap";
+import { Nav, Collapse, Offcanvas, Image } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import CustomerIcon from "../Icon/CustomerIcon";
@@ -48,34 +48,43 @@ const Sidebar = ({ show, onClose }) => {
         width: 300,
         background: "#FFF",
         overflowY: "auto",
-        borderRadius: "20px"
+        borderRadius: "20px",
       }}
     >
       {/* Logo */}
-      <div className="d-flex align-items-center mb-4">
-        <img
-          src="/assets/Images/Max_Logo.png"
-          alt="Max"
-          width={64}
-          className="me-3"
+      <div className="d-flex justify-content-center align-items-center mb-4">
+        <Image
+          src="/assets/Images/Max-Logo.png"
+          alt="Max Logo"
+          width={200}
+          height={50}
+          className="login-logo my-2"
         />
-        <h4 className="mb-0 fw-bold">Max</h4>
       </div>
 
       <Nav className="flex-column gap-2">
-
         {/* Dashboard */}
         <Nav.Link
           onClick={() => handleLinkClick("/dashboard")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname === "/dashboard"
-            || pathname === "/university-detail" || pathname === "/student-profile" ? "bg-dark text-white fw-semibold"
-            : "text-dark"
-            }`}
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
+            pathname === "/dashboard" ||
+            pathname === "/university-detail" ||
+            pathname === "/student-profile"
+              ? "bg-dark text-white fw-semibold"
+              : "text-dark"
+          }`}
         >
-          <DashboardIcon color={pathname === "/dashboard" || pathname === "/university-detail" || pathname === "/student-profile" ? "#fff" : "#292D32"} />
+          <DashboardIcon
+            color={
+              pathname === "/dashboard" ||
+              pathname === "/university-detail" ||
+              pathname === "/student-profile"
+                ? "#fff"
+                : "#292D32"
+            }
+          />
           Dashboard
         </Nav.Link>
-
 
         {/* user list */}
         {/* <Nav.Link
@@ -92,28 +101,35 @@ const Sidebar = ({ show, onClose }) => {
         {/* University */}
         <Nav.Link
           onClick={() => handleLinkClick("/university-list")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname === "/university-list" || pathname === "/create-university"
-            ? "bg-dark text-white fw-semibold"
-            : "text-dark"
-            }`}
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
+            pathname === "/university-list" || pathname === "/create-university"
+              ? "bg-dark text-white fw-semibold"
+              : "text-dark"
+          }`}
         >
-          <ProjectIcon color={pathname === "/university-list" || pathname === "/create-university" ? "#fff" : "#292D32"} />
+          <ProjectIcon
+            color={
+              pathname === "/university-list" ||
+              pathname === "/create-university"
+                ? "#fff"
+                : "#292D32"
+            }
+          />
           University
         </Nav.Link>
 
-        {/* <Nav.Link
+        <Nav.Link
           onClick={() => handleLinkClick("/module-list")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/module-list")
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module")
               ? "bg-dark text-white fw-semibold"
               : "text-dark"
             }`}
         >
-          <BoxIcon color={pathname.startsWith("/module-list") ? "#fff" : "#292D32"} />
+          <BoxIcon color={pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module") ? "#fff" : "#292D32"} />
           Modules
-        </Nav.Link> */}
+        </Nav.Link>
 
         <hr />
-
 
         {/* Settings */}
         <Nav.Link
@@ -132,7 +148,6 @@ const Sidebar = ({ show, onClose }) => {
           <LogoutIcon />
           Logout
         </Nav.Link>
-
       </Nav>
     </div>
   );

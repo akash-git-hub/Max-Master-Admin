@@ -9,6 +9,7 @@ import CreateModule from "./pages/modules/CreateModule";
 import ModuleDetails from "./pages/modules/ModuleDetails";
 import UniversityList from "./pages/university/UniversityList";
 import CreateUniversity from "./pages/university/CreateUniversity";
+import EditModule from "./pages/modules/EditModule";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
         <Route path="/student-profile" element={<StudentProfile />} />
         <Route path="/module-list" element={<ModuleList />} />
         <Route path="/create-module" element={<CreateModule />} />
+        <Route path="/edit-module" element={<EditModule />} />
         <Route path="/module-details" element={<ModuleDetails />} />
         <Route path="/university-list" element={<UniversityList />} />
         <Route path="/create-university" element={<CreateUniversity />} />

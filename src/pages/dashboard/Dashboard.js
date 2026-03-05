@@ -84,7 +84,6 @@ const Dashboard = () => {
                 <div className="flex-grow-1">
                     <Container fluid className="rounded-4 p-4 bg-white vh-100">
                         <h4 className="fw-bold mb-1 text-start">Dashboard</h4>
-                        <p className="fw-normal mb-3 text-start">Complete your profile to get personalized career guidance and opportunities</p>
                         {/* Stat Cards */}
                         <Row className="g-4 mb-4">
                             <Col xl={4} md={6}>
