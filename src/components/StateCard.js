@@ -11,10 +11,10 @@ const StateCard = ({ title, value, subText, valueColor = "#000", icon }) => {
             {value}
           </h4>
 
-          <StepProgressBar
+          {/* <StepProgressBar
             totalSteps={7}
             completedSteps={1}
-          />
+          /> */}
         </div>
         <div className="bg-light-subtle rounded-4 p-3">
           {icon}

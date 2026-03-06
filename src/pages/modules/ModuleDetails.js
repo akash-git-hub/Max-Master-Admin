@@ -1,121 +1,160 @@
-import { Container, Row, Col, Image } from "react-bootstrap";
+import { Container, Row, Col, Image, Stack } from "react-bootstrap";
 import Sidebar from "../../components/Sidebar";
 import { useState } from "react";
 import TrashIcon from "../../Icon/TrashIcon"; // ya bootstrap icon use kr lena
+import { useLocation } from "react-router-dom";
+import { InputField } from "../../components/InputField";
+import { LinkIcon } from "../../Icon/LinkIcon";
+import { SharedButton } from "../../components/SharedButton";
+import BackArrowIcon from "../../Icon/BackArrowIcon";
 
 const ModuleDetails = () => {
-    const [showSidebar, setShowSidebar] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
+  const location = useLocation();
+  const moduleData = location?.state?.data;
 
-    return (
-        <div className="d-md-flex gap-3">
+  console.log(moduleData);
 
-            {/* Sidebar */}
-            <Sidebar show={showSidebar} onClose={() => setShowSidebar(false)} />
+  return (
+    <div className="d-md-flex gap-3 vh-100">
+      {/* Sidebar */}
+      <Sidebar show={showSidebar} onClose={() => setShowSidebar(false)} />
 
-            {/* Right Content */}
-            <div className="flex-grow-1">
+      {/* Right Content */}
+      <div className="flex-grow-1 py-3">
+        <Container
+          fluid
+          // className="p-4 bg-white rounded-4 min-vh-100 min-vh-md-auto"
+          className="rounded-4 p-4 bg-white overflow-y-auto vh-100"
+          style={{ maxHeight: "95vh" }}
+        >
+          <Stack
+            direction="horizontal"
+            className="align-items-center justify-content-start"
+            gap={3}
+          >
+            <SharedButton
+              BtnLabel={<BackArrowIcon strokeWidth={3} size={25} />}
+              BtnVariant={"transparent"}
+              BtnClass={"border-0 p-0"}
+              BtnTitle={"Back"}
+              BtnClick={() => window.history.back()}
+            />
+            <h4 className="fw-bold mb-0 text-start">Module Details</h4>
+          </Stack>
+          
 
-                <Container fluid className="p-4 bg-white rounded-4 min-vh-100 min-vh-md-auto">
+          <Row className="g-4 p-3">
+            <Col md={3} sm={12}>
+              <Stack
+                direction="vertical"
+                className="justify-content-start mt-2 align-items-center h-100"
+              >
+                <Image
+                  src={moduleData?.thumbnail}
+                  width={200}
+                  height={200}
+                  rounded
+                  className="border"
+                />
+              </Stack>
+            </Col>
 
-                    <h4 className="fw-bold mb-1 text-start">Modules Details</h4>
-                    <p className="fw-normal mb-3 text-start">Complete your profile to get personalized career guidance and opportunities</p>
-                    {/* MODULE CARD */}
-                    <div className="p-4 rounded-4 mb-5" style={{ background: "#f3f3f3" }}>
-                        <Row className="align-items-center">
+            <Col md={9} sm={12}>
+              <Stack direction="vertical" gap={0} className="p-2 text-start">
+                <h4 className="fw-bold mb-1">Name</h4>
+                <p className={"mb-0 fw-semibold"}>{moduleData?.name}</p>
+                <h4 className="fw-bold mb-1 mt-3">Description</h4>
+                <p className={"mb-0"}>{moduleData?.description}</p>
+              </Stack>
+            </Col>
+          </Row>
 
-                            {/* LEFT ATTACHMENT */}
-                            <Col md={3}>
-                                <h6 className="fw-semibold mb-3 text-start">Attachment</h6>
+          <Row className="p-3 g-3">
+            {moduleData?.assets_bundle_url && (
+              <Col md={8} sm={12} className="mb-3">
+                <Stack
+                  gap={3}
+                  direction="horizontal"
+                  className="justify-content-start rounded bg-light p-2 "
+                >
+                  <LinkIcon size="24" />{" "}
+                  <h6 className="mb-0">{moduleData?.assets_bundle_url}</h6>
+                </Stack>
+              </Col>
+            )}
 
-                                <div className="d-flex flex-column gap-3">
-                                    <Image
-                                        src="https://picsum.photos/200"
-                                        className="rounded-3"
-                                        style={{ width: 90, height: 90, objectFit: "cover" }}
-                                    />
+            {/* --------------Images section----------------- */}
+            <Col md={12} sm={12}>
+              <h5 className={"ms-4 mb-4 fw-bold text-center "}>
+                {" "}
+                Images & Videos{" "}
+              </h5>
 
-                                    <Image
-                                        src="https://picsum.photos/201"
-                                        className="rounded-3"
-                                        style={{ width: 90, height: 90, objectFit: "cover" }}
-                                    />
-                                </div>
-                            </Col>
+              {moduleData?.images?.length > 0 && (
+                <Row className="g-2 border-top">
+                  {moduleData &&
+                    moduleData.images &&
+                    moduleData?.images.map((item) => (
+                      <Col md={3} sm={12} xs={12} key={item.id}>
+                        <Stack
+                          direction="vertical"
+                          className="align-items-center py-3 "
+                          gap={3}
+                        >
+                          <p className={"mb-0 text-center"}>
+                            {" "}
+                            {item?.label_name}{" "}
+                          </p>
+                          <Image
+                            src={item?.content}
+                            height={250}
+                            width={250}
+                            rounded
+                            className="border"
+                          />
+                        </Stack>
+                      </Col>
+                    ))}
+                </Row>
+              )}
+            </Col>
 
-                            {/* RIGHT CONTENT */}
-                            <Col md={9}>
-                                <div className="d-flex justify-content-between text-start">
-                                    <div>
-                                        <h5 className="fw-semibold">Module Name</h5>
-                                        <p className="text-muted mb-4">Module A</p>
-                                    </div>
-
-                                    <TrashIcon className="text-muted cursor-pointer" />
-                                </div>
-                                <div className="text-start">
-                                    <h5 className="fw-semibold">Description</h5>
-                                    <p className="text-muted mt-2">
-                                        Ut sodales, ex sit amet consectetur accumsan...
-                                    </p>
-
-                                </div>
-
-                            </Col>
-
-                        </Row>
-                    </div>
-
-                    {/* SUB MODULE TITLE */}
-                    <h3 className="fw-bold text-start mb-4">Sub Modules A</h3>
-
-                    {/* SUB MODULE CARD */}
-                    <div className="p-4 rounded-4" style={{ background: "#f3f3f3" }}>
-                        <Row className="align-items-center">
-
-                            {/* LEFT */}
-                            <Col md={3}>
-                                <h6 className="fw-semibold mb-3 text-start">Attachment</h6>
-
-                                <div className="d-flex flex-column gap-3">
-                                    <Image
-                                        src="https://picsum.photos/202"
-                                        className="rounded-3"
-                                        style={{ width: 90, height: 90, objectFit: "cover" }}
-                                    />
-                                    <Image
-                                        src="https://picsum.photos/202"
-                                        className="rounded-3"
-                                        style={{ width: 90, height: 90, objectFit: "cover" }}
-                                    />
-                                </div>
-                            </Col>
-
-                            {/* RIGHT */}
-                            <Col md={9}>
-                                <div className="d-flex justify-content-between text-start">
-                                    <div>
-                                        <h5 className="fw-semibold">Module Name</h5>
-                                        <p className="text-muted mb-4">Sub Module A</p>
-                                    </div>
-                                    <TrashIcon className="text-muted cursor-pointer" />
-                                </div>
-
-
-                                <div className="text-start">
-                                    <h5 className="fw-semibold">Description</h5>
-                                    <p className="text-muted">
-                                        Aliquam a dui vel justo fringilla euismod...
-                                    </p>
-                                </div>
-                            </Col>
-
-                        </Row>
-                    </div>
-
-                </Container>
-            </div>
-        </div>
-    );
+            {/* --------------Videos section----------------- */}
+            <Col md={12} sm={12}>
+              {moduleData?.videos?.length > 0 && (
+                <Row className="g-2 border-top">
+                  {moduleData &&
+                    moduleData.videos &&
+                    moduleData?.videos.map((item) => (
+                      <Col md={3} sm={12} xs={12} key={item.id}>
+                        <Stack
+                          direction="vertical"
+                          className="align-items-center py-3 "
+                          gap={3}
+                        >
+                          <p className={"mb-0 text-center"}>
+                            {" "}
+                            {item?.label_name}{" "}
+                          </p>
+                          <video
+                            src={item.content}
+                            controls
+                            width={250}
+                            height={250}
+                            className="rounded shadow"
+                          />
+                        </Stack>
+                      </Col>
+                    ))}
+                </Row>
+              )}
+            </Col>
+          </Row>
+        </Container>
+      </div>
+    </div>
+  );
 };
 
 export default ModuleDetails;

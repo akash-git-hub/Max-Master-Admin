@@ -254,17 +254,18 @@ const EditModule = () => {
   return (
      <>
         <Loader show={loading} />
-    <div className="d-md-flex gap-3">
+    <div className="d-md-flex vh-100 gap-3">
       <Sidebar show={showSidebar} onClose={() => setShowSidebar(false)} />
 
-      <div className="flex-grow-1">
+      <div className="flex-grow-1 py-3">
         <Container
           fluid
-          className="rounded-4 p-4 bg-white min-vh-100 min-vh-md-auto"
+          // className="rounded-4 p-4 bg-white min-vh-100 min-vh-md-auto"
+          className="rounded-4 p-4 bg-white overflow-y-auto"  style={{maxHeight:'95vh'}}
         >
              <Stack
                   direction="horizontal"
-                  className="align-items-center justify-content-start"
+                  className="align-items-center justify-content-start mb-3"
                   gap={3}
                 >
                   <SharedButton
@@ -274,18 +275,18 @@ const EditModule = () => {
                     BtnTitle={"Back"}
                     BtnClick={() => window.history.back()}
                   />
-                  <h4 className="fw-bold mb-0 text-start">Module</h4>
+                  <h4 className="fw-bold mb-0 text-start ">Edit Module</h4>
 
                 </Stack>
-          <p className="fw-normal mb-3 mt-1 text-start">
+          {/* <p className="fw-normal mb-3 mt-1 text-start">
             Complete your modules to get personalized career guidance and
             opportunities
-          </p>
+          </p> */}
 
           <Row>
             <Col>
               <div className="table_body">
-          <h4 className="fw-bold mb-1 text-start  mb-3">Edit Modules</h4>
+          {/* <h4 className="fw-bold mb-1 text-start  mb-3">Edit Modules</h4> */}
                
 
                 <Card className="p-4 shadow-sm rounded-4">
@@ -371,7 +372,7 @@ const EditModule = () => {
                                   onChange={(e) =>
                                     handleImageNameChange(e, item.id)
                                   }
-                                  placeholder="Image Name"
+                                  FormPlaceHolder="Image Name"
                                 />
 
                                 <UploadAttachments
@@ -440,7 +441,7 @@ const EditModule = () => {
                                   onChange={(e) =>
                                     handleVideoNameChange(e, item.id)
                                   }
-                                  placeholder="Video Name"
+                                  FormPlaceHolder="Video Name"
                                 />
 
                                 <UploadAttachments

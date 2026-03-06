@@ -8,26 +8,29 @@ import {
     ProgressBar,
     ListGroup,
     Badge,
-    Image
+    Image,
+    Stack
 } from "react-bootstrap";
 import Sidebar from "../../components/Sidebar";
 import StateCard from "../../components/StateCard";
 import AddUserIcon from "../../Icon/AddUserIcon";
 import ModuleAccordion from "../../components/ModulesAccordian";
+import { SharedButton } from "../../components/SharedButton";
+import BackArrowIcon from "../../Icon/BackArrowIcon";
 
 
 const activities = [
     {
         title: "Add Braces",
-        icon: "./icons/teeth.png",
+        icon: "assets/Images/teeth.png",
     },
     {
         title: "Remove Cavity",
-        icon: "./icons/teeth.png",
+         icon: "assets/Images/teeth.png",
     },
     {
         title: "Cleaning Teeth",
-        icon: ",/icons/teeth.png",
+         icon: "assets/Images/teeth.png",
     },
 ];
 
@@ -36,16 +39,26 @@ const StudentProfile = () => {
 
 
     return (
-        <div className="d-md-flex gap-3">
+        <div className="d-md-flex vh-100 gap-3">
             <Sidebar show={showSidebar} onClose={() => setShowSidebar(false)} />
 
-            <div className="flex-grow-1">
-                <Container fluid className="rounded-4 p-4 bg-white">
-                    <h2 className="fw-bold mb-1 text-start">Student Profile</h2>
-                    <p className="text-muted text-start">
-                        Complete your profile to get personalized career guidance and opportunities
-                    </p>
+            <div className="flex-grow-1 py-3">
+                <Container fluid className="rounded-4 p-4 bg-white h-100 overflow-y-auto" style={{maxHeight:'100vh'}}>
+                     <Stack
+                  direction="horizontal"
+                  className="align-items-center justify-content-start mb-4"
+                  gap={3}
+                >
+                  <SharedButton
+                    BtnLabel={<BackArrowIcon strokeWidth={3} size={25} />}
+                    BtnVariant={"transparent"}
+                    BtnClass={"border-0 p-0"}
+                    BtnTitle={"Back"}
+                    BtnClick={() => window.history.back()}
+                  />
+                  <h4 className="fw-bold mb-0 text-start">Student Profile</h4>
 
+                </Stack>
                     {/* Stat Cards */}
                     <Row className="g-4 mb-4">
                         <Col xl={4} md={6}>

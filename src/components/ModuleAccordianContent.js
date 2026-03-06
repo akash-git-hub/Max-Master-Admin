@@ -33,9 +33,9 @@ const ModuleAccordionContent = () => {
           <Card className="mt-4 border rounded-4">
             <Card.Body className="d-flex align-items-center p-2">
               <img
-                src="/icons/teeth.png"
+                src="assets/Images/teeth.png"
                 alt="icon"
-                width="20"
+                width="30"
                 className="me-3"
               />
               <span className="fw-semibold">Cleaning Teeth</span>

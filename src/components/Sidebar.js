@@ -43,13 +43,8 @@ const Sidebar = ({ show, onClose }) => {
   /* ================= SIDEBAR CONTENT ================= */
   const SidebarContent = () => (
     <div
-      className="d-flex flex-column px-3 py-4 vh-100"
-      style={{
-        width: 300,
-        background: "#FFF",
-        overflowY: "auto",
-        borderRadius: "20px",
-      }}
+      className="d-flex flex-column px-3 py-4  h-100 bg-white overflow-y-auto rounded-4"
+      style={{ width: 300, }}
     >
       {/* Logo */}
       <div className="d-flex justify-content-center align-items-center mb-4">
@@ -120,12 +115,13 @@ const Sidebar = ({ show, onClose }) => {
 
         <Nav.Link
           onClick={() => handleLinkClick("/module-list")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module")
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module") || pathname.startsWith("/sub-module-list") || pathname.startsWith("/create-sub-module") || pathname.startsWith("/edit-sub-module") || pathname.startsWith("/module-details") 
               ? "bg-dark text-white fw-semibold"
               : "text-dark"
             }`}
         >
-          <BoxIcon color={pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module") ? "#fff" : "#292D32"} />
+          <BoxIcon color={pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module") || pathname.startsWith("/sub-module-list") || pathname.startsWith("/create-sub-module") || pathname.startsWith("/edit-sub-module") || pathname.startsWith("/module-details") 
+              ? "#fff" : "#292D32"} />
           Modules
         </Nav.Link>
 
@@ -155,7 +151,7 @@ const Sidebar = ({ show, onClose }) => {
   return (
     <>
       {/* Desktop */}
-      <div className="d-none d-md-block">
+      <div className="d-none py-3 d-md-block">
         <SidebarContent />
       </div>
 

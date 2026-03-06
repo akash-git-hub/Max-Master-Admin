@@ -146,3 +146,10 @@ export const deleteSubModuleAPI = async (id) => {
     return deleteRequest(path);
 }
 
+export const getUniversityStudentsList = async ({ universityId, limit ,page}) => {
+    const path = `students?university_id=${universityId}&limit=${limit}&page=${page}`;
+    return await getRequest(path);
+}
+
+ 
+

@@ -9,6 +9,7 @@ import { errorAlert, successAlert } from "../../components/Alert";
 import Swal from "sweetalert2";
 import { EditIcon } from "../../Icon/EditIcon";
 import TablePagination from "../../components/TablePagination";
+import { PlusIcon } from "../../Icon/PlusIcon";
 
 const ModuleList = () => {
   const navigate = useNavigate();
@@ -103,17 +104,21 @@ const ModuleList = () => {
     );
   };
 
+  const handleRowClick = (data) => {
+    navigate("/sub-module-list", { state: { data } });
+  };
+
   return (
-    <div className="d-md-flex gap-3">
+    <div className="d-md-flex vh-100  gap-3">
       <Sidebar show={showSidebar} onClose={() => setShowSidebar(false)} />
 
-      <div className="flex-grow-1">
+      <div className="flex-grow-1 py-3">
         <Container
           fluid
-          className="rounded-4 p-4 bg-white min-vh-100 min-vh-md-auto"
+          // className="rounded-4 p-4 bg-white min-vh-100 min-vh-md-auto"
+          className="rounded-4 p-4 bg-white overflow-y-auto"
+          style={{ maxHeight: "100vh" }}
         >
-          {/* <h4 className="fw-bold mb-1 text-start">Modules</h4> */}
-
           {/* University List */}
           <Row>
             <Col>
@@ -121,19 +126,25 @@ const ModuleList = () => {
                 <div className="d-flex justify-content-between mb-3 algin-items-center">
                   <h4 className="fw-bold mt-1 text-start">Module </h4>
                   <Button
-                    variant="dark rounded-5"
+                    variant="transparent"
+                    className="border-0 text-white"
                     onClick={() => {
                       navigate("/create-module");
                     }}
+                    title="Create Module"
                   >
-                    Create Module
+                    <PlusIcon
+                      strokeWidth="2.5"
+                      size={30}
+                      className={"p-1 bg-dark rounded-circle"}
+                    />{" "}
                   </Button>
                 </div>
 
                 <div
                   className="table-responsive rounded-4"
                   style={{
-                    maxHeight: "600px",
+                    maxHeight: "580px",
                     overflowY: "auto",
                     border: "1px solid #eee",
                   }}
@@ -150,7 +161,7 @@ const ModuleList = () => {
                     >
                       <tr className="text-center small fw-semibold">
                         <th className="py-3">S NO</th>
-                        <th className="py-3">MODULE NAME</th>
+                        <th className="py-3">NAME</th>
                         <th className="py-3">DESCRIPTION</th>
                         <th className="py-3">SUB MODULES</th>
                         <th className="py-3">STATUS</th>
@@ -163,7 +174,7 @@ const ModuleList = () => {
                       {modulesData.map((data, index) => (
                         <tr
                           key={index}
-                          //   onClick={() => handleRowClick(data.id)}
+                          onClick={() => handleRowClick(data)}
                           className="table-row-hover"
                           style={{ cursor: "pointer" }}
                         >

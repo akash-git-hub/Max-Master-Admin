@@ -10,6 +10,9 @@ import ModuleDetails from "./pages/modules/ModuleDetails";
 import UniversityList from "./pages/university/UniversityList";
 import CreateUniversity from "./pages/university/CreateUniversity";
 import EditModule from "./pages/modules/EditModule";
+import { SubmoduleList } from "./pages/submodules/SubmoduleList";
+import { CreateSubModule } from "./pages/submodules/CreateSubModule";
+import { EditSubModule } from "./pages/submodules/EditSubModule";
 
 function App() {
   return (
@@ -19,10 +22,16 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/university-detail" element={<UniversityDetail />} />
         <Route path="/student-profile" element={<StudentProfile />} />
+        
         <Route path="/module-list" element={<ModuleList />} />
         <Route path="/create-module" element={<CreateModule />} />
         <Route path="/edit-module" element={<EditModule />} />
         <Route path="/module-details" element={<ModuleDetails />} />
+
+        <Route path="/sub-module-list" element={<SubmoduleList />} />
+        <Route path="/create-sub-module" element={<CreateSubModule />} />
+        <Route path="/edit-sub-module" element={<EditSubModule />} />
+        
         <Route path="/university-list" element={<UniversityList />} />
         <Route path="/create-university" element={<CreateUniversity />} />
       </Routes>
