@@ -49,7 +49,7 @@ const Sidebar = ({ show, onClose }) => {
       {/* Logo */}
       <div className="d-flex justify-content-center align-items-center mb-4">
         <Image
-          src="/assets/Images/Max-Logo.png"
+          src="assets/Images/Max-Logo.png"
           alt="Max Logo"
           width={200}
           height={50}
