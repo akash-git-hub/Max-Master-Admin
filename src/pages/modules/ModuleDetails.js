@@ -2,7 +2,7 @@ import { Container, Row, Col, Image, Stack } from "react-bootstrap";
 import Sidebar from "../../components/Sidebar";
 import { useState } from "react";
 import TrashIcon from "../../Icon/TrashIcon"; // ya bootstrap icon use kr lena
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { InputField } from "../../components/InputField";
 import { LinkIcon } from "../../Icon/LinkIcon";
 import { SharedButton } from "../../components/SharedButton";
@@ -13,7 +13,16 @@ const ModuleDetails = () => {
   const location = useLocation();
   const moduleData = location?.state?.data;
 
-  console.log(moduleData);
+ const [copied, setCopied] = useState(false);
+
+const copyLink = () => {
+  navigator.clipboard.writeText(moduleData?.assets_bundle_url);
+  setCopied(true);
+
+  setTimeout(() => {
+    setCopied(false);
+  }, 1000);
+};
 
   return (
     <div className="d-md-flex gap-3 vh-100">
@@ -72,14 +81,20 @@ const ModuleDetails = () => {
 
           <Row className="p-3 g-3">
             {moduleData?.assets_bundle_url && (
-              <Col md={8} sm={12} className="mb-3">
+              <Col md={10} sm={12} className="mb-3">
                 <Stack
                   gap={3}
                   direction="horizontal"
-                  className="justify-content-start rounded bg-light p-2 "
+                  className="justify-content-between rounded bg-light p-2 "
                 >
-                  <LinkIcon size="24" />{" "}
-                  <h6 className="mb-0">{moduleData?.assets_bundle_url}</h6>
+                  <Stack direction="horizontal" gap={2}>
+                  <LinkIcon size="24"/> 
+                  <Link to={moduleData?.assets_bundle_url} className="text-decoration-none cursor-pointer">
+                  <h6 className="mb-0 text-start">{moduleData?.assets_bundle_url}</h6>
+                  </Link>
+                  </Stack>
+                  <div className="cursor-pointer" onClick={copyLink} title="Copy Link"> {copied ? <small className="text-muted   fw-bold">Copied</small> : "⧉" } </div>
+
                 </Stack>
               </Col>
             )}

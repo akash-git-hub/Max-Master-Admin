@@ -3,20 +3,21 @@ import StepProgressBar from "./StepProgressBar";
 
 const StateCard = ({ title, value, subText, valueColor = "#000", icon }) => {
   return (
-    <Card className="shadow-md rounded-4 h-100 border-1">
+    <Card className="shadow-md bg-light rounded-4 h-100 border-1">
       <Card.Body className="d-flex justify-content-between align-items-center">
-        <div className="text-start">
-          <h6 className="mb-1 text-muted fw-bold">{title}</h6>
-          <h4 className="fw-bold" style={{ color: valueColor }}>
+        <div className="text-center">
+          <h1 className="fw-bold" style={{ color: valueColor ,fontSize:'50px'}} >
             {value}
-          </h4>
+          </h1>
+          <h5 className="mb-1 text-muted fw-bold">{title}</h5>
+
 
           {/* <StepProgressBar
             totalSteps={7}
             completedSteps={1}
           /> */}
         </div>
-        <div className="bg-light-subtle rounded-4 p-3">
+        <div className="bg-white rounded-4 p-3">
           {icon}
         </div>
       </Card.Body>

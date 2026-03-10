@@ -247,8 +247,8 @@ console.log("is File:", vid.file instanceof File);
                           onChange={inputHandler}
                           rows={5}
                           FormPlaceHolder={"Description"}
-                          startIcon={<BookIcon className={"mt-2"} />}
-                          className={"h-100"}
+                          startIcon={<BookIcon className={"mt-1"} />}
+                          className={"h-100 custom-input"}
                         />
                       </Col>
                       <Col md={12} sm={12} xs={12}>

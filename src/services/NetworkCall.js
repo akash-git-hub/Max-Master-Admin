@@ -110,6 +110,10 @@ export const getModulesAPI = async (page, limit = 15) => {
     return await getRequest(path);
 }
 
+export const getDashboardAPI = async () => {
+    const path = `dashboard`;
+    return await getRequest(path);
+} 
 
 export const createModuleAPI = async (data) => {
     const path = "modules";

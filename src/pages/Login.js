@@ -90,38 +90,40 @@ const Login = () => {
             <Container fluid className="login-wrapper">
                 <Row className="justify-content-center align-items-center min-vh-100">
                     <Col xs={11} sm={8} md={6} lg={4} xl={4} className="text-center">
-                        <div className="login-body">
-                            <div className="d-flex justify-content-start w-100">
+                        <div className="login-body d-flex justify-content-between flex-column" style={{height:'500px'}}>
+                            <div className="d-flex justify-content-center w-100">
                             <Image
                                 src="assets/Images/Max-Logo.png"
                                 alt="Max Logo"
                                 width={200}
                                 height={50}
-                                className="login-logo mb-3"
+                                className="login-logo mb-0"
                             /></div>
-                            <h2 className="login-title mb-4">LOGIN</h2>
+                            {/* <h2 className="login-title mb-4">LOGIN</h2> */}
 
-                            <Form onSubmit={submitHandler}>
+                            <Form onSubmit={submitHandler} className="mt-3">
+                                <Stack direction="vertical" gap={3}>
                                 <InputField
-                                    FormLabel="Email Address"
+                                    // FormLabel="Email Address"
                                     FormType="text"
                                     name="email"
-                                    FormPlaceHolder="Enter email"
+                                    FormPlaceHolder="Email Address"
                                     value={inData.email}
                                     onChange={inputHandler}
                                     error={error.email}
-                                    startIcon={<MailIcon />}
+                                    startIcon={<MailIcon className="mt-1"/>}
+                                     
                                 />
 
                                 <InputField
-                                    FormLabel="Password"
+                                    // FormLabel="Password"
                                     FormType={showPassword ? "text" : "password"}
                                     name="password"
-                                    FormPlaceHolder="Enter password"
+                                    FormPlaceHolder="Password"
                                     value={inData.password}
                                     error={error.password}
                                     onChange={inputHandler}
-                                    startIcon={<ShieldIcon />}
+                                    startIcon={<ShieldIcon  className="mt-1"/>}
                                     endIcon={
                                         showPassword ? (
                                             <EyeIcon
@@ -139,7 +141,7 @@ const Login = () => {
 
                                 <Stack
                                     direction="horizontal"
-                                    className="justify-content-between mt-3 mb-4"
+                                    className="justify-content-between mb-4"
                                     gap={3}
                                 >
                                     <Checkbox
@@ -159,6 +161,7 @@ const Login = () => {
                                 <Button className="login-btn w-100 p-2 rounded-5" variant="dark" type="submit">
                                     Log In
                                 </Button>
+                                </Stack>
                             </Form>
                         </div>
                     </Col>

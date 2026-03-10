@@ -14347,7 +14347,7 @@ fieldset:disabled .btn {
   text-align: left;
 }
 
-input.custom-input {
+input.custom-input , textarea.custom-input {
   background: #f5f5f5;
   padding: 10px;
   border: 0px;

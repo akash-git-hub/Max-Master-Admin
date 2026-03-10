@@ -64,7 +64,7 @@ export const AddressAutocomplete = ({
                     ref={inputRef}
                     defaultValue={value}
                     placeholder={placeholder}
-                    className={`rounded-pill custom-input ${className}`}
+                    className={` custom-input ${className}`}
                 />
             </InputGroup>
             {error && (

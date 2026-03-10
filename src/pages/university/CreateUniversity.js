@@ -35,7 +35,7 @@ const CreateUniversity = () => {
     // "password": "",
     contact_person: "",
     contact_number: "",
-    no_of_license: 1,
+    no_of_license: 0,
     thumbnail: null,
     // "modules": [],
     full_address: "",
@@ -148,7 +148,7 @@ const CreateUniversity = () => {
       isValid = false;
     }
 
-    if (!no_of_license) {
+    if (!no_of_license || Number(no_of_license) === 0) {
       setError((prev) => ({ ...prev, no_of_license: "Required!" }));
       isValid = false;
     }
@@ -229,13 +229,13 @@ const CreateUniversity = () => {
                   {/* Name */}
                   <Col md={4}>
                     <InputField
-                      FormLabel="Name"
+                      // FormLabel="Name"
                       name="name"
                       error={error.name}
                       value={inData.name}
                       onChange={inputHandler}
-                      startIcon={<AddUserIcon />}
-                      FormPlaceHolder="M1"
+                      startIcon={<AddUserIcon className="mt-1"/>}
+                      FormPlaceHolder="Enter Name"
                     />
                   </Col>
 
@@ -243,7 +243,7 @@ const CreateUniversity = () => {
                   <Col md={4}>
                     <AddressAutocomplete
                       error={error?.full_address}
-                      label="Location"
+                      placeholder=" Select Location"
                       value={inData.full_address}
                       onSelect={(address) => {
                         setInData((prev) => ({
@@ -262,12 +262,11 @@ const CreateUniversity = () => {
                   {/* Email */}
                   <Col md={4}>
                     <InputField
-                      FormLabel="Email address"
                       name="email"
                       value={inData.email}
                       onChange={inputHandler}
                       error={error.email}
-                      startIcon={<MailIcon />}
+                      startIcon={<MailIcon className="mt-1"/>}
                       FormPlaceHolder="Enter email"
                     />
                   </Col>
@@ -275,24 +274,22 @@ const CreateUniversity = () => {
                   {/* Contact */}
                   <Col md={4}>
                     <InputField
-                      FormLabel="Contact Number"
                       name="contact_number"
                       value={inData.contact_number}
                       onChange={inputHandler}
                       error={error.contact_number}
-                      startIcon={<PhoneIcon />}
-                      FormPlaceHolder="Enter contact"
+                      startIcon={<PhoneIcon className="mt-1"/>}
+                      FormPlaceHolder="Enter contact number"
                     />
                   </Col>
 
                   <Col md={4}>
                     <InputField
-                      FormLabel="Contact Person"
                       name="contact_person"
                       error={error.contact_person}
                       value={inData.contact_person}
                       onChange={inputHandler}
-                      startIcon={<BoxIcon />}
+                      startIcon={<BoxIcon className="mt-1"/>}
                       FormPlaceHolder="Contact Person"
                     />
                   </Col>
@@ -300,13 +297,12 @@ const CreateUniversity = () => {
                   {/* License */}
                   <Col md={4}>
                     <InputField
-                      FormLabel="No of license"
                       name="no_of_license"
                       error={error.no_of_license}
                       value={inData.no_of_license}
                       onChange={inputHandler}
-                      startIcon={<LicenseIcon />}
-                      FormPlaceHolder="10"
+                      startIcon={<LicenseIcon className="mt-1"/>}
+                      FormPlaceHolder="No. Of License"
                     />
                   </Col>
                 </Row>

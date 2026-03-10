@@ -6,22 +6,37 @@ import AddUserIcon from "../../Icon/AddUserIcon";
 import Sidebar from "../../components/Sidebar";
 import EyeIcon from "../../Icon/EyeIcon";
 import LogoutIcon from "../../Icon/LogoutIcon";
-import { getUniversityList } from "../../services/NetworkCall";
+import { getDashboardAPI, getUniversityList } from "../../services/NetworkCall";
 import { errorAlert } from "../../components/Alert";
 import { Loader } from "../../components/Loader";
 import TablePagination from "../../components/TablePagination";
+import BoxIcon from "../../Icon/BoxIcon";
+import ProjectIcon from "../../Icon/ProjectIcon";
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const [showSidebar, setShowSidebar] = useState(false);
   const [loading, setLoading] = useState(false);
   const [universityAccounts, setUniversityAccounts] = useState([]);
+  const [dashboardData, setDashboardData] = useState([]);
   const [pagination, setPagination] = useState({
     currentPage: 1,
     totalPages: 1,
     totalRecord: 0,
     limit: 10,
   });
+
+  const fetchDashboardData = async () => {
+    setLoading(true);
+    const res = await getDashboardAPI();
+    if(res.success){
+      setDashboardData(res?.data);
+    }
+    else{
+      errorAlert({ message: res.message });
+    }
+     setLoading(false);
+  }
 
   const fetchAccountsData = async (page = 1) => {
     setLoading(true);
@@ -58,6 +73,10 @@ const Dashboard = () => {
     );
   };
 
+  useEffect(()=>{
+    fetchDashboardData();
+  },[])
+
   useEffect(() => {
     fetchAccountsData(pagination.currentPage);
   }, [pagination.currentPage]);
@@ -91,16 +110,16 @@ const Dashboard = () => {
               <Col xl={4} md={6}>
                 <StateCard
                   title="University"
-                  value="555,777"
+                  value={dashboardData?.cards?.universities}
                   valueColor="#000"
                   subText="Today Add 10 Customer"
-                  icon={<AddUserIcon />}
+                  icon={<ProjectIcon />}
                 />
               </Col>
               <Col xl={4} md={6}>
                 <StateCard
                   title="Total Users"
-                  value="430,493"
+                  value={dashboardData?.cards?.users}
                   valueColor="#000"
                   subText="Today Add 32 Contractor"
                   icon={<AddUserIcon />}
@@ -109,10 +128,10 @@ const Dashboard = () => {
               <Col xl={4} md={6}>
                 <StateCard
                   title="Total Modules"
-                  value="348,931"
+                  value={dashboardData?.cards?.modules}
                   valueColor="#000"
                   subText="Today 40 Complete projects"
-                  icon={<AddUserIcon />}
+                  icon={<BoxIcon />}
                 />
               </Col>
             </Row>
@@ -126,7 +145,7 @@ const Dashboard = () => {
                   <div
                     className="table-responsive rounded-4"
                     style={{
-                      maxHeight: "440px",
+                      maxHeight: "400px",
                       overflowY: "auto",
                       border: "1px solid #eee",
                     }}
