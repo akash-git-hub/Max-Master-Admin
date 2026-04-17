@@ -13,6 +13,9 @@ import EditModule from "./pages/modules/EditModule";
 import { SubmoduleList } from "./pages/submodules/SubmoduleList";
 import { CreateSubModule } from "./pages/submodules/CreateSubModule";
 import { EditSubModule } from "./pages/submodules/EditSubModule";
+import StepsList from "./pages/steps/StepsList";
+import StepsCreate from "./pages/steps/StepsCreate";
+import StepsUpdate from "./pages/steps/StepsUpdate";
 
 function App() {
   return (
@@ -34,6 +37,10 @@ function App() {
         
         <Route path="/university-list" element={<UniversityList />} />
         <Route path="/create-university" element={<CreateUniversity />} />
+
+        <Route path="/steps-list" element={<StepsList />} />
+        <Route path="/steps-create" element={<StepsCreate />} />
+        <Route path="/steps-edit" element={<StepsUpdate />} />
       </Routes>
     </div>
   );

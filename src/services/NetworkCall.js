@@ -135,6 +135,11 @@ export const getSubModuleAPI = async ({ moduleId, page }) => {
     return await getRequest(path);
 }
 
+export const getAllSubModuleAPI = async ({ moduleId }) => {
+    const path = `sub-module?module_id=${moduleId}&all=true`;
+    return await getRequest(path);
+}
+
 export const createSubModuleAPI = async (data) => {
     const path = "sub-module";
     return postRequest(path, data);
@@ -155,5 +160,22 @@ export const getUniversityStudentsList = async ({ universityId, limit ,page}) =>
     return await getRequest(path);
 }
 
- 
+export const createStepsAPI = async (data) => {
+    const path = "steps";
+    return postRequest(path, data);
+}
 
+export const getStepsAPI = async () => {
+    const path = `steps`;
+    return getRequest(path);
+}
+
+export const updateStepsAPI = async (data) => {
+    const path = "steps";
+    return putRequest(path, data);
+}
+
+export const getStepsDetailAPI = async ({ module_id, sub_module_id }) => {
+    const path = `steps/detail?module_id=${module_id}&sub_module_id=${sub_module_id}`;
+    return getRequest(path);
+}

@@ -1,6 +1,7 @@
 {
   "name": "master_admin",
   "version": "0.1.0",
+  "homepage": "/admin",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.1",

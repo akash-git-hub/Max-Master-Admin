@@ -14,6 +14,7 @@ import BoxIcon from "../Icon/BoxIcon";
 import RevenueIcon from "../Icon/RevenueIcon";
 import PlatformSuspensionIcon from "../Icon/PlatformSuspensionIcon";
 import { AuthContext } from "../states/AuthContext";
+import StepsIcon from "../Icon/StepsIcon";
 
 const Sidebar = ({ show, onClose }) => {
   const [openRevenue, setOpenRevenue] = useState(false);
@@ -123,6 +124,19 @@ const Sidebar = ({ show, onClose }) => {
           <BoxIcon color={pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module") || pathname.startsWith("/sub-module-list") || pathname.startsWith("/create-sub-module") || pathname.startsWith("/edit-sub-module") || pathname.startsWith("/module-details") 
               ? "#fff" : "#292D32"} />
           Modules
+        </Nav.Link>
+
+        {/* Steps  */}
+        <Nav.Link
+          onClick={() => handleLinkClick("/steps-list")}
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/steps-list") || pathname.startsWith("/steps-create") || pathname.startsWith("/steps-edit")
+              ? "bg-dark text-white fw-semibold"
+              : "text-dark"
+            }`}
+        >
+          <StepsIcon color={pathname.startsWith("/steps-list") || pathname.startsWith("/steps-create") || pathname.startsWith("/steps-edit")
+              ? "#fff" : "#292D32"} />
+          Assessments
         </Nav.Link>
 
         <hr />
