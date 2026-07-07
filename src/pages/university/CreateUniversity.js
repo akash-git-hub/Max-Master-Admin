@@ -54,6 +54,10 @@ const CreateUniversity = () => {
     contact_person: "",
     contact_number: "",
     no_of_license: "",
+    country: "",
+    state: "",
+    city: "",
+    postal_code: "",
     // "modules": "",
     full_address: "",
     thumbnail: "",
@@ -152,6 +156,7 @@ const CreateUniversity = () => {
       setError((prev) => ({ ...prev, no_of_license: "Required!" }));
       isValid = false;
     }
+    console.log("handleSubmit called",error,isValid);
 
     if (!isValid) return;
     setLoading(true);
@@ -167,12 +172,17 @@ const CreateUniversity = () => {
     formData.append("state", state);
     formData.append("city", city);
     formData.append("postal_code", postal_code);
-    formData.append("latitude", latitude);
-    formData.append("longitude", longitude);
+    formData.append("latitude", latitude || 0);
+    formData.append("longitude", longitude || 0);
     formData.append("no_of_license", no_of_license);
 
     if (thumbnail) {
       formData.append("thumbnail", thumbnail); // ✅ FILE
+    }
+
+    console.log("FormData entries:");
+    for (let pair of formData.entries()) {
+      console.log(pair[0] + ": " + pair[1]);
     }
 
     const res = await addUniversity(formData);
@@ -238,28 +248,7 @@ const CreateUniversity = () => {
                       FormPlaceHolder="Enter Name"
                     />
                   </Col>
-
-                  {/* Location */}
-                  <Col md={4}>
-                    <AddressAutocomplete
-                      error={error?.full_address}
-                      placeholder=" Select Location"
-                      value={inData.full_address}
-                      onSelect={(address) => {
-                        setInData((prev) => ({
-                          ...prev,
-                          ...address,
-                        }));
-
-                        setError((prev) => ({
-                          ...prev,
-                          full_address: "",
-                        }));
-                      }}
-                    />
-                  </Col>
-
-                  {/* Email */}
+                   {/* Email */}
                   <Col md={4}>
                     <InputField
                       name="email"
@@ -282,6 +271,87 @@ const CreateUniversity = () => {
                       FormPlaceHolder="Enter contact number"
                     />
                   </Col>
+
+                  {/* Location */}
+                  {/* <Col md={4}>
+                    <AddressAutocomplete
+                      error={error?.full_address}
+                      placeholder=" Select Location"
+                      value={inData.full_address}
+                      onSelect={(address) => {
+                        setInData((prev) => ({
+                          ...prev,
+                          ...address,
+                        }));
+
+                        setError((prev) => ({
+                          ...prev,
+                          full_address: "",
+                        }));
+                      }}
+                    />
+                  </Col> */}
+
+                  <Col md={4}>
+                    <InputField
+                      name="full_address"
+                      error={error.full_address}
+                      value={inData.full_address}
+                      onChange={inputHandler}
+                      startIcon={<LocationEditIcon className="mt-1"/>}
+                      FormPlaceHolder="Enter Address"
+                    />
+                  </Col>
+
+                  {/* Country */}
+                  <Col md={4}>
+                    <InputField
+                      name="country"
+                      error={error.country}
+                      value={inData.country}
+                      onChange={inputHandler}
+                      startIcon={<LocationEditIcon className="mt-1"/>}
+                      FormPlaceHolder="Enter Country"
+                    />
+                  </Col>
+
+                  {/* State */}
+                  <Col md={4}>
+                    <InputField
+                      name="state"
+                      error={error.state}
+                      value={inData.state}
+                      onChange={inputHandler}
+                      startIcon={<LocationEditIcon className="mt-1"/>}
+                      FormPlaceHolder="Enter State"
+                    />
+                  </Col>
+
+                  {/* City */}
+                  <Col md={4}>
+                    <InputField
+                      name="city"
+                      error={error.city}
+                      value={inData.city}
+                      onChange={inputHandler}
+                      startIcon={<LocationEditIcon className="mt-1"/>}
+                      FormPlaceHolder="Enter City"
+                    />
+                  </Col>
+
+                  {/* Postal Code */}
+                  <Col md={4}>
+                    <InputField
+                      name="postal_code"
+                      error={error.postal_code}
+                      value={inData.postal_code}
+                      onChange={inputHandler}
+                      startIcon={<LocationEditIcon className="mt-1"/>}
+                      FormPlaceHolder="Enter Postal Code"
+                    />
+                  </Col>
+
+                 
 
                   <Col md={4}>
                     <InputField

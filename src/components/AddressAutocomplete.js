@@ -3,6 +3,7 @@ import { Form, InputGroup } from "react-bootstrap";
 import { LocationEditIcon } from "lucide-react";
 
 export const AddressAutocomplete = ({
+    autoComplete = true,
     label ="",
     placeholder = "Enter Address",
     value = "",
@@ -64,6 +65,7 @@ export const AddressAutocomplete = ({
                     ref={inputRef}
                     defaultValue={value}
                     placeholder={placeholder}
+                    autoComplete={autoComplete ? "on" : "off"}
                     className={` custom-input ${className}`}
                 />
             </InputGroup>
