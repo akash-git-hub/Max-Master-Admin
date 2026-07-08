@@ -5,6 +5,7 @@ const AttachmentUpload = ({
   multiple = false,
   onFilesChange,
   accept,
+  error,
 }) => {
   const fileInputRef = useRef(null);
   const [files, setFiles] = useState([]);
@@ -91,6 +92,7 @@ const AttachmentUpload = ({
             accept={accept}
             hidden
           />
+          <small className="text-danger">{error}</small>
         </Col>
 
         {files.map((item, index) => (

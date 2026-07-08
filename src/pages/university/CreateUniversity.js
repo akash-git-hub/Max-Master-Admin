@@ -152,6 +152,26 @@ const CreateUniversity = () => {
       isValid = false;
     }
 
+      if (!state) {
+      setError((prev) => ({ ...prev, state: "Required!" }));
+      isValid = false;
+      }
+    
+      if (!country) {
+      setError((prev) => ({ ...prev, country: "Required!" }));
+      isValid = false;
+      }
+    
+      if (!city) {
+      setError((prev) => ({ ...prev, city: "Required!" }));
+      isValid = false;
+      }
+    
+      if (!postal_code) {
+      setError((prev) => ({ ...prev, postal_code: "Required!" }));
+      isValid = false;
+    }
+
     if (!no_of_license || Number(no_of_license) === 0) {
       setError((prev) => ({ ...prev, no_of_license: "Required!" }));
       isValid = false;
@@ -233,7 +253,9 @@ const CreateUniversity = () => {
                       ...prev,
                       thumbnail: file,
                     }));
+                    setError((pre)=>({...pre, "thumbnail":""}))
                   }}
+                  error={error?.thumbnail}
                 />
                 <Row className="g-4">
                   {/* Name */}
