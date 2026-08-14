@@ -170,12 +170,17 @@ export const getStepsAPI = async () => {
     return getRequest(path);
 }
 
-export const updateStepsAPI = async (data) => {
-    const path = "steps";
+// export const updateStepsAPI = async (data) => {
+//     const path = "steps";
+//     return putRequest(path, data);
+// }
+
+export const updateStepsAPI = async ({id, data}) => {
+    const path = `steps/${id}`;
     return putRequest(path, data);
 }
 
-export const getStepsDetailAPI = async ({ module_id, sub_module_id }) => {
+export const getStepsDetailAPI = async ({ module_id, sub_module_id="" }) => {
     const path = `steps/detail?module_id=${module_id}&sub_module_id=${sub_module_id}`;
     return getRequest(path);
 }

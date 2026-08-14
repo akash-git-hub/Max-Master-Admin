@@ -236,7 +236,7 @@ const StepsCreate = () => {
                                     <div className="d-flex justify-content-between align-items-center mb-3">
                                         <h5 className="fw-bold mb-0">Steps</h5>
                                         <Button variant="dark" onClick={addStep} className="d-flex align-items-center gap-2">
-                                            <PlusIcon size={18} /> 
+                                            <PlusIcon size={18} />
                                         </Button>
                                     </div>
 
@@ -275,13 +275,13 @@ const StepsCreate = () => {
                                                     </td>
                                                     <td>
                                                         {index !== 0 && (
-                                                            <Button
-                                                                variant="outline-danger"
-                                                                size="sm"
-                                                                onClick={() => removeStep(index)}
-                                                            >
-                                                                <Trash2 size={16} />
-                                                            </Button>
+                                                                <SharedButton
+                                                                    BtnVariant={'transparent'}
+                                                                    BtnSize={'sm'}
+                                                                    BtnLabel={<Trash2 size={25} color="red" />}
+                                                                    BtnClick={() => removeStep(index)}
+                                                                    BtnClass={"p-3 w-100"}
+                                                                /> 
                                                         )}
                                                     </td>
                                                 </tr>

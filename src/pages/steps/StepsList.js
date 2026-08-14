@@ -22,7 +22,6 @@ const StepsList = () => {
             const res = await getStepsAPI();
 
             if (res?.success) {
-                console.log(res?.data)
                 setStepsData(res?.data || []);
             }
         } catch (error) {
@@ -34,6 +33,10 @@ const StepsList = () => {
 
     const handleCreateButtonClick = () => {
         navigate("/steps-create");
+    }
+
+    const handleRowclick = (item) => {
+        navigate("/steps-edit", {state : { data : item }})
     }
 
     return (
@@ -103,7 +106,7 @@ const StepsList = () => {
                                                 ) : (
                                                     stepsData.map((item, index) =>
                                                         // item.steps.map((step, stepIndex) => (
-                                                        <tr key={`${index}-${index}`}>
+                                                        <tr key={`${index}-${index}`} className="cursor-pointer" onClick={()=>handleRowclick(item)}>
                                                             <td>{index + 1}</td>
                                                             <td>{item.module_name}</td>
                                                             <td>{item.sub_module_name || "-"}</td>

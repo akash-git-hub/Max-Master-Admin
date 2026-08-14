@@ -22,7 +22,6 @@ const UniversityDetail = () => {
   const location = useLocation();
   const universityId = location?.state?.data?.id;
   const universityData = location?.state?.data;
-  console.log(universityData, universityId, location?.state.data);
   const [studentsData, setStudentsData] = useState([]);
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -123,12 +122,11 @@ const UniversityDetail = () => {
                       <h4 className="mb-1 fw-bold">{universityData?.name}</h4>
                     </div>
 
-                    <p className="mb-1 text-muted text-start">
-                      {universityData?.email}
-                    </p>
-
                     <p className="mb-0 text-muted text-start">
-                      {universityData?.full_address}
+                      {universityData?.user?.email}
+                    </p>
+                    <p className="mb-0 small text-muted text-start">
+                      {universityData?.full_address}{universityData?.city}, {universityData?.state}, {universityData?.country}, {universityData?.postal_code}
                       <br />
                       {universityData?.contact_number}
                     </p>
