@@ -29,7 +29,7 @@ import ImageIcon from "../../Icon/ImageIcon";
 import { PlusIcon } from "../../Icon/PlusIcon";
 import BackArrowIcon from "../../Icon/BackArrowIcon";
 import { Loader } from "../../components/Loader";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 export const EditSubModule = () => {
   const [loading, setLoading] = useState(false);
@@ -41,6 +41,7 @@ export const EditSubModule = () => {
     name: "",
     description: "",
     assets_bundle_url: "",
+    assets_bundle: "",
     thumbnail: "",
     thumbnail_url: "",
     deleted_content_id: [],
@@ -48,7 +49,7 @@ export const EditSubModule = () => {
   const [error, setError] = useState({
     name: "",
     description: "",
-    assets_bundle_url: "",
+    assets_bundle: "",
     thumbnail: "",
   });
   const generateId = () =>
@@ -77,6 +78,12 @@ export const EditSubModule = () => {
     setError((pre) => ({ ...pre, [name]: "" }));
   };
 
+  const fileHandler = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setInData(prev => ({ ...prev, assets_bundle: file }));
+  };
+
   useEffect(() => {
     if (location?.state?.data) {
       const data = location.state.data;
@@ -94,24 +101,24 @@ export const EditSubModule = () => {
       setImages(
         data.images?.length
           ? data.images.map((img) => ({
-              id: img.id,
-              image_name: img.label_name,
-              url: img?.content,
-              file: null,
-              isExisting: true,
-            }))
+            id: img.id,
+            image_name: img.label_name,
+            url: img?.content,
+            file: null,
+            isExisting: true,
+          }))
           : [createEmptyImage()],
       );
 
       setVideos(
         data.videos?.length
           ? data.videos.map((vid) => ({
-              id: vid.id,
-              video_name: vid.label_name,
-              url: vid.content,
-              file: null,
-              isExisting: true,
-            }))
+            id: vid.id,
+            video_name: vid.label_name,
+            url: vid.content,
+            file: null,
+            isExisting: true,
+          }))
           : [createEmptyVideo()],
       );
     }
@@ -127,7 +134,7 @@ export const EditSubModule = () => {
       description,
       thumbnail,
       deleted_content_id,
-      assets_bundle_url,
+      assets_bundle,
     } = inData;
 
     if (!name.trim()) {
@@ -140,8 +147,8 @@ export const EditSubModule = () => {
       isValid = false;
     }
 
-    if (!assets_bundle_url.trim()) {
-      setError((prev) => ({ ...prev, assets_bundle_url: "Required" }));
+    if (!inData.assets_bundle_url && !assets_bundle) {
+      setError((prev) => ({ ...prev, assets_bundle: "Required" }));
       isValid = false;
     }
 
@@ -152,7 +159,9 @@ export const EditSubModule = () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
-    formData.append("assets_bundle_url", assets_bundle_url);
+    if (assets_bundle) {
+      formData.append("assets_bundle", assets_bundle);
+    }
     if (thumbnail) {
       formData.append("thumbnail", thumbnail);
     }
@@ -271,7 +280,7 @@ export const EditSubModule = () => {
           <Container
             fluid
             // className="rounded-4 p-4 bg-white min-vh-100 min-vh-md-auto"
-            className="rounded-4 p-4 bg-white overflow-y-auto"  style={{maxHeight:'95vh'}}
+            className="rounded-4 p-4 bg-white overflow-y-auto" style={{ maxHeight: '95vh' }}
           >
             <Stack
               direction="horizontal"
@@ -287,11 +296,11 @@ export const EditSubModule = () => {
               />
               <h4 className="fw-bold mb-0 text-start"> Edit SubModule </h4>
             </Stack>
-            
+
             <Row>
               <Col>
                 <div className="table_body">
-                  
+
                   <Card className="p-4 shadow-sm rounded-4">
                     <Form className="p-3" onSubmit={submitHandler}>
                       <Row className="g-4">
@@ -340,15 +349,20 @@ export const EditSubModule = () => {
                           />
                         </Col>
                         <Col md={12} sm={12} xs={12}>
-                          <InputField
-                            name={"assets_bundle_url"}
-                            value={inData?.assets_bundle_url}
-                            error={error?.assets_bundle_url}
-                            onChange={inputHandler}
-                            type={"text"}
-                            FormPlaceHolder={"Asset Bundle Url"}
-                            startIcon={<LinkIcon size="24" />}
-                          />
+                          <div className="text-start">
+                            <p className="form-label text-start text-muted">Asset Bundle Url</p>
+                            <input
+                              type="file"
+                              className="form-control w-100"
+                              name="assets_bundle"
+                              placeholder="asset bundle url"
+                              // value={inData?.assets_bundle}
+                              onChange={fileHandler}
+                            />
+                            {inData?.assets_bundle_url && <p className="text-start mb-1"><Link to={inData?.assets_bundle_url} target="_blank" className="ms-2">Previous asset bundle URL</Link></p>}
+
+                            <small className="error text-danger">{error?.assets_bundle}</small>
+                          </div>
                         </Col>
 
                         {/* ---------------------Multiple Image Attachments----------------  */}
@@ -369,15 +383,15 @@ export const EditSubModule = () => {
                                     item.isExisting === false &&
                                     images.length === 1
                                   ) && (
-                                    <div
-                                      className="position-absolute me-1 mt-1 top-0 end-0 z-1 "
-                                      onClick={() => removeImageColumn(item)}
-                                    >
-                                      <span className=" px-2 pb-1 rounded-circle fw-bold bg-danger text-white cursor-pointer ">
-                                        x
-                                      </span>
-                                    </div>
-                                  )}
+                                      <div
+                                        className="position-absolute me-1 mt-1 top-0 end-0 z-1 "
+                                        onClick={() => removeImageColumn(item)}
+                                      >
+                                        <span className=" px-2 pb-1 rounded-circle fw-bold bg-danger text-white cursor-pointer ">
+                                          x
+                                        </span>
+                                      </div>
+                                    )}
                                   <InputField
                                     value={item.image_name}
                                     onChange={(e) =>
@@ -438,15 +452,15 @@ export const EditSubModule = () => {
                                     item.isExisting === false &&
                                     images.length === 1
                                   ) && (
-                                    <div
-                                      className="position-absolute me-1 mt-1 top-0 end-0 z-1 "
-                                      onClick={() => removeVideoColumn(item)}
-                                    >
-                                      <span className=" px-2 pb-1 rounded-circle fw-bold bg-danger text-white cursor-pointer ">
-                                        x
-                                      </span>
-                                    </div>
-                                  )}
+                                      <div
+                                        className="position-absolute me-1 mt-1 top-0 end-0 z-1 "
+                                        onClick={() => removeVideoColumn(item)}
+                                      >
+                                        <span className=" px-2 pb-1 rounded-circle fw-bold bg-danger text-white cursor-pointer ">
+                                          x
+                                        </span>
+                                      </div>
+                                    )}
                                   <InputField
                                     value={item.video_name}
                                     onChange={(e) =>

@@ -14403,3 +14403,11 @@ input.custom-input , textarea.custom-input {
 *{
   scrollbar-width: thin;
 }
+
+
+.ab-upload{
+    border: 2px dashed grey !important;
+    padding: 2em; 
+    align-items: center;
+    color: grey;
+}

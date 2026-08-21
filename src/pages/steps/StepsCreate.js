@@ -144,7 +144,7 @@ const StepsCreate = () => {
             module_id: formData.module_id,
             sub_module_id: formData.sub_module_id || null,   // Send null if empty
             steps: formData.steps.map((step, index) => ({
-                step_number: index + 1,
+                // step_number: index + 1,
                 name: step.name.trim(),
                 description: step.description ? step.description.trim() : null
             }))
@@ -280,7 +280,7 @@ const StepsCreate = () => {
                                                                     BtnSize={'sm'}
                                                                     BtnLabel={<Trash2 size={25} color="red" />}
                                                                     BtnClick={() => removeStep(index)}
-                                                                    BtnClass={"p-3 w-100"}
+                                                                    BtnClass={"p-3 w-100 border-0"}
                                                                 /> 
                                                         )}
                                                     </td>
@@ -291,8 +291,15 @@ const StepsCreate = () => {
                                 </div>
 
                                 {/* Submit Button */}
-                                <div className="mt-4 w-25">
-                                    <Button
+                                {/* <div className="mt-4 w-25"> */}
+                                    <SharedButton
+                                        BtnType={'submit'}
+                                        BtnClass={'col-md-4 col-12'}
+                                        BtnVariant={'dark'}
+                                        BtnSize={"md"}
+                                        BtnLabel={"Submit"}
+                                    />
+                                    {/* <Button
                                         type="submit"
                                         className="w-100"
                                         variant="dark"
@@ -306,8 +313,8 @@ const StepsCreate = () => {
                                         }}
                                     >
                                         Submit
-                                    </Button>
-                                </div>
+                                    </Button> */}
+                                {/* </div> */}
                             </div>
                         </Form>
                     </Container>

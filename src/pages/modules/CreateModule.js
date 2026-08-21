@@ -25,6 +25,7 @@ import { PlusIcon } from "../../Icon/PlusIcon";
 import BackArrowIcon from "../../Icon/BackArrowIcon";
 import { Loader } from "../../components/Loader";
 import { useNavigate } from "react-router-dom";
+import { LucideUpload, UploadCloud } from "lucide-react";
 
 const CreateModule = () => {
   const [showSidebar, setShowSidebar] = useState(false);
@@ -33,7 +34,7 @@ const CreateModule = () => {
   const [inData, setInData] = useState({
     name: "",
     description: "",
-    assets_bundle_url: "",
+    assets_bundle: null,
     thumbnail: "",
   });
   const [error, setError] = useState({
@@ -59,12 +60,18 @@ const CreateModule = () => {
     setError((pre) => ({ ...pre, [name]: "" }));
   };
 
+  const fileHandler = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setInData(prev => ({ ...prev, assets_bundle: file }));
+  };
+
   const handleFormSubmit = async (e) => {
-   e.preventDefault();
+    e.preventDefault();
 
     let isValid = true;
 
-    const { name, description, thumbnail, assets_bundle_url } = inData;
+    const { name, description, thumbnail, assets_bundle } = inData;
 
     if (!name.trim()) {
       setError((prev) => ({ ...prev, name: "Required" }));
@@ -94,9 +101,11 @@ const CreateModule = () => {
 
     formData.append("name", name);
     formData.append("description", description);
-    formData.append("assets_bundle_url", assets_bundle_url);
+    if (assets_bundle) {
+      formData.append("assets_bundle", assets_bundle);
+    }
     formData.append("thumbnail", thumbnail)
-     
+
     // IMAGES (optional)
     images.forEach((img) => {
       if (img.file instanceof File) {
@@ -104,7 +113,6 @@ const CreateModule = () => {
         formData.append("image_label[]", img.image_name || "");
       }
     });
-    console.log("images",images)
 
 
     // VIDEOS (optional)
@@ -112,10 +120,13 @@ const CreateModule = () => {
       if (vid.file instanceof File) {
         formData.append("videos", vid.file);
         formData.append("video_label[]", vid.video_name || "");
-        console.log("video file type:", vid.file);
-console.log("is File:", vid.file instanceof File);
       }
     });
+
+    for (const [key, value] of formData.entries()) {
+      console.log(key, ":", value);
+    }
+
 
     const res = await createModuleAPI(formData);
 
@@ -159,7 +170,6 @@ console.log("is File:", vid.file instanceof File);
     );
   };
 
-  console.log(videos);
 
 
   const addImageColumn = (e) => {
@@ -180,7 +190,8 @@ console.log("is File:", vid.file instanceof File);
     setVideos((prev) => prev.filter((item) => item.id !== id));
   };
 
-  return ( <>
+
+  return (<>
     <Loader show={loading} />
     <div className="d-md-flex gap-3">
       <Sidebar show={showSidebar} onClose={() => setShowSidebar(false)} />
@@ -189,25 +200,25 @@ console.log("is File:", vid.file instanceof File);
         <Container
           fluid
           // className="rounded-4 p-4 bg-white min-vh-100 min-vh-md-auto"
-          className="rounded-4 p-4 bg-white overflow-y-auto"  style={{maxHeight:'95vh'}}
+          className="rounded-4 p-4 bg-white overflow-y-auto" style={{ maxHeight: '95vh' }}
 
         >
-           <Stack
-                  direction="horizontal"
-                  className="align-items-center justify-content-start mb-4"
-                  gap={3}
-                >
-                  <SharedButton
-                    BtnLabel={<BackArrowIcon strokeWidth={3} size={25} />}
-                    BtnVariant={"transparent"}
-                    BtnClass={"border-0 p-0"}
-                    BtnTitle={"Back"}
-                    BtnClick={() => window.history.back()}
-                  />
-                  <h4 className="fw-bold mb-0 text-start">Create Module</h4>
+          <Stack
+            direction="horizontal"
+            className="align-items-center justify-content-start mb-4"
+            gap={3}
+          >
+            <SharedButton
+              BtnLabel={<BackArrowIcon strokeWidth={3} size={25} />}
+              BtnVariant={"transparent"}
+              BtnClass={"border-0 p-0"}
+              BtnTitle={"Back"}
+              BtnClick={() => window.history.back()}
+            />
+            <h4 className="fw-bold mb-0 text-start">Create Module</h4>
 
-                </Stack>
-          
+          </Stack>
+
 
           <Row>
             <Col>
@@ -251,17 +262,35 @@ console.log("is File:", vid.file instanceof File);
                           className={"h-100 custom-input"}
                         />
                       </Col>
-                      <Col md={12} sm={12} xs={12}>
+                      {/* <Col md={12} sm={12} xs={12}>
                         <InputField
-                          name={"assets_bundle_url"}
-                          value={inData?.assets_bundle_url}
-                          error={error?.assets_bundle_url}
+                          name={"assets_bundle"}
+                          value={inData?.assets_bundle}
+                          error={error?.assets_bundle}
                           onChange={inputHandler}
-                          type={"text"}
+                          type={"file"}
                           FormPlaceHolder={"Asset Bundle Url"}
                           startIcon={<LinkIcon size="24" />}
                         />
-                      </Col>
+                      </Col> */}
+
+                      <div>
+                        {/* <div className="ab-upload form-control">
+                          <LucideUpload size={40}/>
+                         <p className="mb-0 mt-2">Upload Asset Bundle file</p> 
+                        </div> */}
+                        <p className="form-label text-start text-muted">Asset Bundle Url</p>
+                        <input
+                          type="file"
+                          className="form-control w-100"
+                          name="assets_bundle"
+                          placeholder="asset bundle url"
+                          // value={inData?.assets_bundle}
+                          onChange={fileHandler}
+                        />
+                        <small className="error text-danger">{error?.assets_bundle}</small>
+                      </div>
+
 
                       {/* ---------------------Multiple Image Attachments----------------  */}
                       <Col
@@ -350,16 +379,16 @@ console.log("is File:", vid.file instanceof File);
                                     className="position-absolute me-1 mt-1 top-0 end-0 z-1 "
                                     onClick={() => removeVideoColumn(item.id)}
                                   >
-                                   <span className=" px-2 pb-1 rounded-circle fw-bold bg-danger text-white cursor-pointer ">
+                                    <span className=" px-2 pb-1 rounded-circle fw-bold bg-danger text-white cursor-pointer ">
                                       x
                                     </span>
                                   </div>
                                 )}
-                               <InputField
-                              value={item.video_name}
-                              onChange={(e) => handleVideoNameChange(e, item.id)}
-                              FormPlaceHolder="Video Name"
-                            />
+                                <InputField
+                                  value={item.video_name}
+                                  onChange={(e) => handleVideoNameChange(e, item.id)}
+                                  FormPlaceHolder="Video Name"
+                                />
 
                                 <UploadAttachments
                                   label={
@@ -369,7 +398,7 @@ console.log("is File:", vid.file instanceof File);
                                       <span className="text-muted">
                                         Upload Video
                                       </span>{" "}
-                                    </>     
+                                    </>
                                   }
                                   onChange={(file) => handleVideoFileChange(file, item.id)}
                                   accept={"video"}
@@ -380,7 +409,7 @@ console.log("is File:", vid.file instanceof File);
 
                           {/* Add Button */}
                           <Col md={2} sm={12} xs={12} className="text-start">
-                           <SharedButton
+                            <SharedButton
                               BtnLabel={
                                 <div className="pb-1 px-1 bg-dark text-white rounded-circle">
                                   <PlusIcon className={"mt-1"} />
@@ -413,7 +442,7 @@ console.log("is File:", vid.file instanceof File);
         </Container>
       </div>
     </div>
-    </>
+  </>
   );
 };
 

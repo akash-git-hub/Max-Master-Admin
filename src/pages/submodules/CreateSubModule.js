@@ -35,13 +35,13 @@ export const CreateSubModule = () => {
   const [inData, setInData] = useState({
     name: "",
     description: "",
-    assets_bundle_url: "",
+    assets_bundle: "",
     thumbnail: "",
   });
   const [error, setError] = useState({
     name: "",
     description: "",
-    assets_bundle_url: "",
+    assets_bundle: "",
     thumbnail: "",
   });
 
@@ -62,12 +62,19 @@ export const CreateSubModule = () => {
     setError((pre) => ({ ...pre, [name]: "" }));
   };
 
+    const fileHandler = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setInData(prev => ({ ...prev, assets_bundle: file}));
+};
+
+  
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     let isValid = true;
 
-    const { name, description, thumbnail, assets_bundle_url } = inData;
+    const { name, description, thumbnail, assets_bundle } = inData;
 
     if (!name.trim()) {
       setError((prev) => ({ ...prev, name: "Required" }));
@@ -79,8 +86,8 @@ export const CreateSubModule = () => {
       isValid = false;
     }
 
-    if (!assets_bundle_url.trim()) {
-      setError((prev) => ({ ...prev, assets_bundle_url: "Required" }));
+    if (!assets_bundle) {
+      setError((prev) => ({ ...prev, assets_bundle: "Required" }));
       isValid = false;
     }
 
@@ -98,7 +105,7 @@ export const CreateSubModule = () => {
     formData.append("module_id", moduleId);
     formData.append("name", name);
     formData.append("description", description);
-    formData.append("assets_bundle_url", assets_bundle_url);
+    formData.append("assets_bundle", assets_bundle);
     formData.append("thumbnail", thumbnail);
     // files.forEach((file) => {
     //   formData.append("files", file);
@@ -119,6 +126,11 @@ export const CreateSubModule = () => {
         formData.append("video_label[]", vid.video_name || "");
       }
     });
+    
+    // ------------payload------------------------
+    for (const [key, value] of formData.entries()) {
+      console.log(key, ":", value);
+    }
 
     const res = await createSubModuleAPI(formData);
     if (res.success) {
@@ -262,7 +274,7 @@ export const CreateSubModule = () => {
                             className={"h-100"}
                           />
                         </Col>
-                        <Col md={12} sm={12} xs={12}>
+                        {/* <Col md={12} sm={12} xs={12}>
                           <InputField
                             name={"assets_bundle_url"}
                             value={inData?.assets_bundle_url}
@@ -272,7 +284,24 @@ export const CreateSubModule = () => {
                             FormPlaceHolder={"Asset Bundle Url"}
                             startIcon={<LinkIcon size="24" />}
                           />
-                        </Col>
+                        </Col> */}
+
+                        <div>
+                        {/* <div className="ab-upload form-control">
+                          <LucideUpload size={40}/>
+                         <p className="mb-0 mt-2">Upload Asset Bundle file</p> 
+                        </div> */}
+                        <p className="form-label text-start text-muted">Asset Bundle Url</p>
+                        <input
+                          type="file"
+                          className="form-control w-100"
+                          name="assets_bundle"
+                          placeholder="asset bundle url"
+                          // value={inData?.assets_bundle}
+                          onChange={fileHandler}
+                        />
+                        <small className="error text-danger">{error?.assets_bundle}</small>
+                      </div>
 
                         {/* ---------------------Multiple Image Attachments----------------  */}
                         <Col

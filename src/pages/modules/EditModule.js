@@ -18,7 +18,7 @@ import { BookIcon } from "../../Icon/BookIcon";
 import { LinkIcon } from "../../Icon/LinkIcon";
 import ImageIcon from "../../Icon/ImageIcon";
 import { PlusIcon } from "../../Icon/PlusIcon";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { updateModuleAPI } from "../../services/NetworkCall";
 import BackArrowIcon from "../../Icon/BackArrowIcon";
 import { Loader } from "../../components/Loader";
@@ -32,6 +32,7 @@ const EditModule = () => {
     name: "",
     description: "",
     assets_bundle_url: "",
+    assets_bundle: "",
     thumbnail: "",
     thumbnail_url: "",
     deleted_content_id: [],
@@ -68,6 +69,12 @@ const EditModule = () => {
     setError((pre) => ({ ...pre, [name]: "" }));
   };
 
+  const fileHandler = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setInData(prev => ({ ...prev, assets_bundle: file }));
+  };
+
   useEffect(() => {
     if (location?.state?.data) {
       const data = location.state.data;
@@ -85,24 +92,24 @@ const EditModule = () => {
       setImages(
         data.images?.length
           ? data.images.map((img) => ({
-              id: img.id,
-              image_name: img.label_name,
-              url: img?.content,
-              file: null,
-              isExisting: true,
-            }))
+            id: img.id,
+            image_name: img.label_name,
+            url: img?.content,
+            file: null,
+            isExisting: true,
+          }))
           : [createEmptyImage()],
       );
 
       setVideos(
         data.videos?.length
           ? data.videos.map((vid) => ({
-              id: vid.id,
-              video_name: vid.label_name,
-              url: vid.content,
-              file: null,
-              isExisting: true,
-            }))
+            id: vid.id,
+            video_name: vid.label_name,
+            url: vid.content,
+            file: null,
+            isExisting: true,
+          }))
           : [createEmptyVideo()],
       );
     }
@@ -118,7 +125,7 @@ const EditModule = () => {
       description,
       thumbnail,
       deleted_content_id,
-      assets_bundle_url,
+      assets_bundle,
     } = inData;
 
     if (!name.trim()) {
@@ -143,7 +150,9 @@ const EditModule = () => {
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
-    formData.append("assets_bundle_url", assets_bundle_url);
+    if (assets_bundle) {
+      formData.append("assets_bundle", assets_bundle);
+    }
     if (thumbnail) {
       formData.append("thumbnail", thumbnail);
     }
@@ -252,249 +261,255 @@ const EditModule = () => {
   };
 
   return (
-     <>
-        <Loader show={loading} />
-    <div className="d-md-flex vh-100 gap-3">
-      <Sidebar show={showSidebar} onClose={() => setShowSidebar(false)} />
+    <>
+      <Loader show={loading} />
+      <div className="d-md-flex vh-100 gap-3">
+        <Sidebar show={showSidebar} onClose={() => setShowSidebar(false)} />
 
-      <div className="flex-grow-1 py-3">
-        <Container
-          fluid
-          // className="rounded-4 p-4 bg-white min-vh-100 min-vh-md-auto"
-          className="rounded-4 p-4 bg-white overflow-y-auto"  style={{maxHeight:'95vh'}}
-        >
-             <Stack
-                  direction="horizontal"
-                  className="align-items-center justify-content-start mb-3"
-                  gap={3}
-                >
-                  <SharedButton
-                    BtnLabel={<BackArrowIcon strokeWidth={3} size={25} />}
-                    BtnVariant={"transparent"}
-                    BtnClass={"border-0 p-0"}
-                    BtnTitle={"Back"}
-                    BtnClick={() => window.history.back()}
-                  />
-                  <h4 className="fw-bold mb-0 text-start ">Edit Module</h4>
+        <div className="flex-grow-1 py-3">
+          <Container
+            fluid
+            // className="rounded-4 p-4 bg-white min-vh-100 min-vh-md-auto"
+            className="rounded-4 p-4 bg-white overflow-y-auto" style={{ maxHeight: '95vh' }}
+          >
+            <Stack
+              direction="horizontal"
+              className="align-items-center justify-content-start mb-3"
+              gap={3}
+            >
+              <SharedButton
+                BtnLabel={<BackArrowIcon strokeWidth={3} size={25} />}
+                BtnVariant={"transparent"}
+                BtnClass={"border-0 p-0"}
+                BtnTitle={"Back"}
+                BtnClick={() => window.history.back()}
+              />
+              <h4 className="fw-bold mb-0 text-start ">Edit Module</h4>
 
-                </Stack>
-          {/* <p className="fw-normal mb-3 mt-1 text-start">
+            </Stack>
+            {/* <p className="fw-normal mb-3 mt-1 text-start">
             Complete your modules to get personalized career guidance and
             opportunities
           </p> */}
 
-          <Row>
-            <Col>
-              <div className="table_body">
-          {/* <h4 className="fw-bold mb-1 text-start  mb-3">Edit Modules</h4> */}
-               
+            <Row>
+              <Col>
+                <div className="table_body">
+                  {/* <h4 className="fw-bold mb-1 text-start  mb-3">Edit Modules</h4> */}
 
-                <Card className="p-4 shadow-sm rounded-4">
-                  <Form className="p-3" onSubmit={submitHandler}>
-                    <Row className="g-4">
-                      <Col md={12} sm={12} xs={12} className="text-start mb-2">
-                        <UploadAttachments
-                          label="Upload"
-                          accept="image"
-                          value={inData?.thumbnail_url}
-                          error={error?.thumbnail}
-                          onChange={(file) =>
-                            setInData((prev) => ({ ...prev, thumbnail: file }))
-                          }
-                        />
-                      </Col>
-                      <Col md={6} sm={12} xs={12}>
-                        <InputField
-                          type={"text"}
-                          name={"name"}
-                          value={inData?.name}
-                          onChange={inputHandler}
-                          error={error?.name}
-                          FormPlaceHolder={"Enter Name"}
-                          startIcon={<ProfileIcon className="mt-1" />}
-                        />
-                      </Col>
-                      <Col md={12} sm={12} xs={12}>
-                        <InputField
-                          label={"Description"}
-                          name={"description"}
-                          isTextArea={true}
-                          value={inData?.description}
-                          error={error?.description}
-                          onChange={inputHandler}
-                          rows={5}
-                          FormPlaceHolder={"Description"}
-                          startIcon={<BookIcon className={"mt-2"} />}
-                          className={"h-100"}
-                        />
-                      </Col>
-                      <Col md={12} sm={12} xs={12}>
-                        <InputField
-                          name={"assets_bundle_url"}
-                          value={inData?.assets_bundle_url}
-                          error={error?.assets_bundle_url}
-                          onChange={inputHandler}
-                          type={"text"}
-                          FormPlaceHolder={"Asset Bundle Url"}
-                          startIcon={<LinkIcon size="24" />}
-                        />
-                      </Col>
 
-                      {/* ---------------------Multiple Image Attachments----------------  */}
-                      <Col
-                        md={12}
-                        sm={12}
-                        xs={12}
-                        className="shadow rounded p-3"
-                      >
-                        <Row className="g-2">
-                          {images.map((item) => (
-                            <Col md={3} key={item.id}>
-                              <Stack
-                                className="align-items-center border rounded p-3 position-relative"
-                                gap={3}
-                              >
-                                {!(
-                                  item.isExisting === false &&
-                                  images.length === 1
-                                ) && (
-                                  <div
-                                    className="position-absolute me-1 mt-1 top-0 end-0 z-1 "
-                                    onClick={() => removeImageColumn(item)}
-                                  >
-                                    <span className=" px-2 pb-1 rounded-circle fw-bold bg-danger text-white cursor-pointer ">
-                                      x
-                                    </span>
-                                  </div>
-                                )}
-                                <InputField
-                                  value={item.image_name}
-                                  onChange={(e) =>
-                                    handleImageNameChange(e, item.id)
-                                  }
-                                  FormPlaceHolder="Image Name"
-                                />
-
-                                <UploadAttachments
-                                  label={
-                                    <>
-                                      <ImageIcon /> <span>Upload Image</span>
-                                    </>
-                                  }
-                                  value={item?.url}
-                                  accept="image"
-                                  onChange={(file) =>
-                                    handleImageFileChange(file, item.id)
-                                  }
-                                />
-                              </Stack>
-                            </Col>
-                          ))}
-
-                          {/* Add Button */}
-                          <Col md={2} sm={12} xs={12}>
-                            <SharedButton
-                              BtnLabel={
-                                <div className="pb-1 px-1 bg-dark text-white rounded-circle">
-                                  <PlusIcon className={"mt-1"} />
-                                </div>
-                              }
-                              BtnSize={"sm"}
-                              BtnVariant="transparent"
-                              BtnClass="border-0"
-                              BtnType={"button"}
-                              BtnClick={addImageColumn}
+                  <Card className="p-4 shadow-sm rounded-4">
+                    <Form className="p-3" onSubmit={submitHandler}>
+                      <Row className="g-4">
+                        <Col md={12} sm={12} xs={12} className="text-start mb-2">
+                          <UploadAttachments
+                            label="Upload"
+                            accept="image"
+                            value={inData?.thumbnail_url}
+                            error={error?.thumbnail}
+                            onChange={(file) =>
+                              setInData((prev) => ({ ...prev, thumbnail: file }))
+                            }
+                          />
+                        </Col>
+                        <Col md={6} sm={12} xs={12}>
+                          <InputField
+                            type={"text"}
+                            name={"name"}
+                            value={inData?.name}
+                            onChange={inputHandler}
+                            error={error?.name}
+                            FormPlaceHolder={"Enter Name"}
+                            startIcon={<ProfileIcon className="mt-1" />}
+                          />
+                        </Col>
+                        <Col md={12} sm={12} xs={12}>
+                          <InputField
+                            label={"Description"}
+                            name={"description"}
+                            isTextArea={true}
+                            value={inData?.description}
+                            error={error?.description}
+                            onChange={inputHandler}
+                            rows={5}
+                            FormPlaceHolder={"Description"}
+                            startIcon={<BookIcon className={"mt-2"} />}
+                            className={"h-100"}
+                          />
+                        </Col>
+                        <Col md={12} sm={12} xs={12}>
+                          
+                          <div>
+                            <p className="form-label text-start text-muted">Asset Bundle Url</p>
+                            <input
+                              type="file"
+                              className="form-control w-100"
+                              name="assets_bundle"
+                              placeholder="asset bundle url"
+                              // value={inData?.assets_bundle}
+                              onChange={fileHandler}
                             />
-                          </Col>
-                        </Row>
-                      </Col>
+                            {inData?.assets_bundle_url && <p className="text-start"><Link to={inData?.assets_bundle_url} target="_blank" >Previous asset bundle URL</Link></p>}
+                            
+                            <small className="error text-danger">{error?.assets_bundle}</small>
+                          </div>
+                        </Col>
 
-                      {/* ---------------------Multiple Video Attachments----------------  */}
-                      <Col
-                        md={12}
-                        sm={12}
-                        xs={12}
-                        className="shadow rounded p-3"
-                      >
-                        <Row className="g-2">
-                          {videos.map((item) => (
-                            <Col md={3} key={item.id}>
-                              <Stack
-                                className="align-items-center border rounded p-3 position-relative"
-                                gap={3}
-                              >
-                                {!(
-                                  item.isExisting === false &&
-                                  images.length === 1
-                                ) && (
-                                  <div
-                                    className="position-absolute me-1 mt-1 top-0 end-0 z-1 "
-                                    onClick={() => removeVideoColumn(item)}
-                                  >
-                                    <span className=" px-2 pb-1 rounded-circle fw-bold bg-danger text-white cursor-pointer ">
-                                      x
-                                    </span>
+                        {/* ---------------------Multiple Image Attachments----------------  */}
+                        <Col
+                          md={12}
+                          sm={12}
+                          xs={12}
+                          className="shadow rounded p-3"
+                        >
+                          <Row className="g-2">
+                            {images.map((item) => (
+                              <Col md={3} key={item.id}>
+                                <Stack
+                                  className="align-items-center border rounded p-3 position-relative"
+                                  gap={3}
+                                >
+                                  {!(
+                                    item.isExisting === false &&
+                                    images.length === 1
+                                  ) && (
+                                      <div
+                                        className="position-absolute me-1 mt-1 top-0 end-0 z-1 "
+                                        onClick={() => removeImageColumn(item)}
+                                      >
+                                        <span className=" px-2 pb-1 rounded-circle fw-bold bg-danger text-white cursor-pointer ">
+                                          x
+                                        </span>
+                                      </div>
+                                    )}
+                                  <InputField
+                                    value={item.image_name}
+                                    onChange={(e) =>
+                                      handleImageNameChange(e, item.id)
+                                    }
+                                    FormPlaceHolder="Image Name"
+                                  />
+
+                                  <UploadAttachments
+                                    label={
+                                      <>
+                                        <ImageIcon /> <span>Upload Image</span>
+                                      </>
+                                    }
+                                    value={item?.url}
+                                    accept="image"
+                                    onChange={(file) =>
+                                      handleImageFileChange(file, item.id)
+                                    }
+                                  />
+                                </Stack>
+                              </Col>
+                            ))}
+
+                            {/* Add Button */}
+                            <Col md={2} sm={12} xs={12}>
+                              <SharedButton
+                                BtnLabel={
+                                  <div className="pb-1 px-1 bg-dark text-white rounded-circle">
+                                    <PlusIcon className={"mt-1"} />
                                   </div>
-                                )}
-                                <InputField
-                                  value={item.video_name}
-                                  onChange={(e) =>
-                                    handleVideoNameChange(e, item.id)
-                                  }
-                                  FormPlaceHolder="Video Name"
-                                />
-
-                                <UploadAttachments
-                                  value={item?.url}
-                                  label={
-                                    <>
-                                      <ImageIcon /> <span>Upload Video</span>
-                                    </>
-                                  }
-                                  accept="video"
-                                  onChange={(file) =>
-                                    handleVideoFileChange(file, item.id)
-                                  }
-                                />
-                              </Stack>
+                                }
+                                BtnSize={"sm"}
+                                BtnVariant="transparent"
+                                BtnClass="border-0"
+                                BtnType={"button"}
+                                BtnClick={addImageColumn}
+                              />
                             </Col>
-                          ))}
+                          </Row>
+                        </Col>
 
-                          {/* Add Button */}
-                          <Col md={2} sm={12} xs={12}>
-                            <SharedButton
-                              BtnLabel={
-                                <div className="pb-1 px-1 bg-dark text-white rounded-circle">
-                                  <PlusIcon className={"mt-1"} />
-                                </div>
-                              }
-                              BtnSize={"sm"}
-                              BtnVariant="transparent"
-                              BtnClass="border-0"
-                              BtnType={"button"}
-                              BtnClick={addVideoColumn}
-                            />
-                          </Col>
-                        </Row>
-                      </Col>
+                        {/* ---------------------Multiple Video Attachments----------------  */}
+                        <Col
+                          md={12}
+                          sm={12}
+                          xs={12}
+                          className="shadow rounded p-3"
+                        >
+                          <Row className="g-2">
+                            {videos.map((item) => (
+                              <Col md={3} key={item.id}>
+                                <Stack
+                                  className="align-items-center border rounded p-3 position-relative"
+                                  gap={3}
+                                >
+                                  {!(
+                                    item.isExisting === false &&
+                                    images.length === 1
+                                  ) && (
+                                      <div
+                                        className="position-absolute me-1 mt-1 top-0 end-0 z-1 "
+                                        onClick={() => removeVideoColumn(item)}
+                                      >
+                                        <span className=" px-2 pb-1 rounded-circle fw-bold bg-danger text-white cursor-pointer ">
+                                          x
+                                        </span>
+                                      </div>
+                                    )}
+                                  <InputField
+                                    value={item.video_name}
+                                    onChange={(e) =>
+                                      handleVideoNameChange(e, item.id)
+                                    }
+                                    FormPlaceHolder="Video Name"
+                                  />
 
-                      <Col md={4} sm={12} xs={12}>
-                        <SharedButton
-                          BtnLabel={"Update"}
-                          BtnVariant={"dark"}
-                          BtnClass={"rounded-5 w-100 mt-4 fw-bold py-2"}
-                          BtnType={"submit"}
-                        />
-                      </Col>
-                    </Row>
-                  </Form>
-                </Card>
-              </div>
-            </Col>
-          </Row>
-        </Container>
+                                  <UploadAttachments
+                                    value={item?.url}
+                                    label={
+                                      <>
+                                        <ImageIcon /> <span>Upload Video</span>
+                                      </>
+                                    }
+                                    accept="video"
+                                    onChange={(file) =>
+                                      handleVideoFileChange(file, item.id)
+                                    }
+                                  />
+                                </Stack>
+                              </Col>
+                            ))}
+
+                            {/* Add Button */}
+                            <Col md={2} sm={12} xs={12}>
+                              <SharedButton
+                                BtnLabel={
+                                  <div className="pb-1 px-1 bg-dark text-white rounded-circle">
+                                    <PlusIcon className={"mt-1"} />
+                                  </div>
+                                }
+                                BtnSize={"sm"}
+                                BtnVariant="transparent"
+                                BtnClass="border-0"
+                                BtnType={"button"}
+                                BtnClick={addVideoColumn}
+                              />
+                            </Col>
+                          </Row>
+                        </Col>
+
+                        <Col md={4} sm={12} xs={12}>
+                          <SharedButton
+                            BtnLabel={"Update"}
+                            BtnVariant={"dark"}
+                            BtnClass={"rounded-5 w-100 mt-4 fw-bold py-2"}
+                            BtnType={"submit"}
+                          />
+                        </Col>
+                      </Row>
+                    </Form>
+                  </Card>
+                </div>
+              </Col>
+            </Row>
+          </Container>
+        </div>
       </div>
-    </div>
     </>
   );
 };

@@ -121,6 +121,10 @@ const StepsUpdate = () => {
         }
     }
 
+    const handleAddSteps = () => {
+        navigate('/steps-create');
+    }
+
     return (
         <>
             <Loader show={loading} />
@@ -162,12 +166,12 @@ const StepsUpdate = () => {
                             </Row>
 
                         <div className="mt-4">
-                            {/* <div className="d-flex justify-content-between mb-3">
+                            <div className="d-flex justify-content-between mb-3">
                                 <h5>Steps</h5>
-                                <Button variant="dark" onClick={addStep}>
+                                <Button variant="dark" onClick={handleAddSteps}>
                                     <PlusIcon size={18} /> Add Step
                                 </Button>
-                            </div> */}
+                            </div>
 
                             <Table bordered hover>
                                 <thead className="table-light">
