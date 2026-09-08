@@ -46,7 +46,7 @@ const Sidebar = ({ show, onClose }) => {
       {/* Logo */}
       <div className="d-flex justify-content-center align-items-center mb-4">
         <Image
-          src="/assets/Images/Max_Logo.png"
+          src="assets/Images/Max-Logo.png"
           alt="Max Logo"
           width={100}
           height={100}
@@ -146,7 +146,7 @@ const Sidebar = ({ show, onClose }) => {
 
         {/* Mobile */}
       <div className="d-flex justify-content-between align-items-center mt-2 p-2 rounded-4 w-100 d-md-none" style={{backgroundColor:'#1F0F55'}}>
-        <Image src="/assets/images/Max_Logo.png" alt="Max Logo" width={200} height={50}  className="object-fit-cover"/>
+        <Image src="assets/Images/Max-Logo.png" alt="Max Logo" width={200} height={50}  className="object-fit-cover"/>
         <Button variant="transparent" onClick={() => setExpanded(!expanded)} className="d-md-none border-0 fw-bold fs-1 p-0 text-white me-3" > ≡  </Button>
       </div>
 
