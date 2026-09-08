@@ -1,7 +1,6 @@
 import { useContext, useState } from "react";
-import { Nav, Collapse, Offcanvas, Image } from "react-bootstrap";
+import { Nav, Collapse, Offcanvas, Image, Button } from "react-bootstrap";
 import { useLocation, useNavigate } from "react-router-dom";
-
 import CustomerIcon from "../Icon/CustomerIcon";
 import DashboardIcon from "../Icon/DashboardIcon";
 import ContractIcon from "../Icon/ContractIcon";
@@ -60,10 +59,10 @@ const Sidebar = ({ show, onClose }) => {
         <Nav.Link
           onClick={() => handleLinkClick("/dashboard")}
           className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname === "/dashboard" ||
-              pathname === "/university-detail" ||
-              pathname === "/student-profile"
-              ? "bg-warning text-white fw-semibold"
-              : "text-white"
+            pathname === "/university-detail" ||
+            pathname === "/student-profile"
+            ? "bg-warning text-white fw-semibold"
+            : "text-white"
             }`}
         >
           <DashboardIcon color={"#fff"} />
@@ -86,8 +85,8 @@ const Sidebar = ({ show, onClose }) => {
         <Nav.Link
           onClick={() => handleLinkClick("/university-list")}
           className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname === "/university-list" || pathname === "/create-university"
-              ? "bg-warning text-white fw-semibold"
-              : "text-white"
+            ? "bg-warning text-white fw-semibold"
+            : "text-white"
             }`}
         >
           <ProjectIcon color={"#fff"} />
@@ -111,7 +110,7 @@ const Sidebar = ({ show, onClose }) => {
             : "text-white"
             }`}
         >
-          <StepsIcon color={ "#fff" } />
+          <StepsIcon color={"#fff"} />
           Assessments
         </Nav.Link>
 
@@ -122,7 +121,7 @@ const Sidebar = ({ show, onClose }) => {
           onClick={() => handleLinkClick("#")}
           className="d-flex align-items-center gap-3 px-4 py-3 text-white"
         >
-          <SettingIcon color="#fff"/>
+          <SettingIcon color="#fff" />
           Settings
         </Nav.Link>
 
@@ -131,7 +130,7 @@ const Sidebar = ({ show, onClose }) => {
           onClick={logOutHandler}
           className="d-flex align-items-center gap-3 px-4 py-3 text-white"
         >
-          <LogoutIcon color="#ff5757"/>
+          <LogoutIcon color="#ff5757" />
           Logout
         </Nav.Link>
       </Nav>
@@ -146,17 +145,20 @@ const Sidebar = ({ show, onClose }) => {
       </div>
 
       {/* Mobile */}
+      <div className="d-flex justify-content-between align-items-center mt-2 p-2 rounded-4 w-100 d-md-none" style={{ backgroundColor: '#1F0F55' }}>
+        <Image src="assets/Images/Max_Logo.png" alt="Max Logo" width={200} height={50} className="object-fit-cover" />
+        <Button variant="transparent" onClick={() => setExpanded(!expanded)} className="d-md-none border-0 fw-bold fs-1 p-0 text-white me-3" > ≡  </Button>
+      </div>
+
+
       <Offcanvas
-        show={show}
-        onHide={onClose}
+        show={expanded}
+        onHide={() => setExpanded(false)}
         placement="start"
-        className="d-md-none"
+        className="d-md-none rounded-4"
         style={{ width: 300 }}
       >
-        <Offcanvas.Header closeButton />
-        <Offcanvas.Body className="p-0">
-          <SidebarContent />
-        </Offcanvas.Body>
+        <SidebarContent />
       </Offcanvas>
     </>
   );
