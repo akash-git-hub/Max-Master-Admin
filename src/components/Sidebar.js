@@ -43,18 +43,15 @@ const Sidebar = ({ show, onClose }) => {
 
   /* ================= SIDEBAR CONTENT ================= */
   const SidebarContent = () => (
-    <div
-      className="d-flex flex-column px-3 py-4  h-100 bg-white overflow-y-auto rounded-4"
-      style={{ width: 300, }}
-    >
+    <div className="sidebar-container px-3 py-4 rounded-4"  >
       {/* Logo */}
       <div className="d-flex justify-content-center align-items-center mb-4">
         <Image
-          src="assets/Images/Max-Logo.png"
+          src="assets/Images/Max_Logo.png"
           alt="Max Logo"
-          width={200}
-          height={50}
-          className="login-logo my-2"
+          width={100}
+          height={100}
+          className="w-100"
         />
       </div>
 
@@ -62,23 +59,14 @@ const Sidebar = ({ show, onClose }) => {
         {/* Dashboard */}
         <Nav.Link
           onClick={() => handleLinkClick("/dashboard")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
-            pathname === "/dashboard" ||
-            pathname === "/university-detail" ||
-            pathname === "/student-profile"
-              ? "bg-dark text-white fw-semibold"
-              : "text-dark"
-          }`}
-        >
-          <DashboardIcon
-            color={
-              pathname === "/dashboard" ||
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname === "/dashboard" ||
               pathname === "/university-detail" ||
               pathname === "/student-profile"
-                ? "#fff"
-                : "#292D32"
-            }
-          />
+              ? "bg-warning text-white fw-semibold"
+              : "text-white"
+            }`}
+        >
+          <DashboardIcon color={"#fff"} />
           Dashboard
         </Nav.Link>
 
@@ -97,45 +85,33 @@ const Sidebar = ({ show, onClose }) => {
         {/* University */}
         <Nav.Link
           onClick={() => handleLinkClick("/university-list")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${
-            pathname === "/university-list" || pathname === "/create-university"
-              ? "bg-dark text-white fw-semibold"
-              : "text-dark"
-          }`}
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname === "/university-list" || pathname === "/create-university"
+              ? "bg-warning text-white fw-semibold"
+              : "text-white"
+            }`}
         >
-          <ProjectIcon
-            color={
-              pathname === "/university-list" ||
-              pathname === "/create-university"
-                ? "#fff"
-                : "#292D32"
-            }
-          />
+          <ProjectIcon color={"#fff"} />
           University
         </Nav.Link>
 
         <Nav.Link
           onClick={() => handleLinkClick("/module-list")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module") || pathname.startsWith("/sub-module-list") || pathname.startsWith("/create-sub-module") || pathname.startsWith("/edit-sub-module") || pathname.startsWith("/module-details") 
-              ? "bg-dark text-white fw-semibold"
-              : "text-dark"
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module") || pathname.startsWith("/sub-module-list") || pathname.startsWith("/create-sub-module") || pathname.startsWith("/edit-sub-module") || pathname.startsWith("/module-details")
+            ? "bg-warning text-white fw-semibold"
+            : "text-white"
             }`}
         >
-          <BoxIcon color={pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module") || pathname.startsWith("/sub-module-list") || pathname.startsWith("/create-sub-module") || pathname.startsWith("/edit-sub-module") || pathname.startsWith("/module-details") 
-              ? "#fff" : "#292D32"} />
-          Modules
-        </Nav.Link>
+          <BoxIcon color={"#fff"} /> Modules </Nav.Link>
 
         {/* Steps  */}
         <Nav.Link
           onClick={() => handleLinkClick("/steps-list")}
           className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/steps-list") || pathname.startsWith("/steps-create") || pathname.startsWith("/steps-edit")
-              ? "bg-dark text-white fw-semibold"
-              : "text-dark"
+            ? "bg-warning text-white fw-semibold"
+            : "text-white"
             }`}
         >
-          <StepsIcon color={pathname.startsWith("/steps-list") || pathname.startsWith("/steps-create") || pathname.startsWith("/steps-edit")
-              ? "#fff" : "#292D32"} />
+          <StepsIcon color={ "#fff" } />
           Assessments
         </Nav.Link>
 
@@ -144,18 +120,18 @@ const Sidebar = ({ show, onClose }) => {
         {/* Settings */}
         <Nav.Link
           onClick={() => handleLinkClick("#")}
-          className="d-flex align-items-center gap-3 px-4 py-3 text-dark"
+          className="d-flex align-items-center gap-3 px-4 py-3 text-white"
         >
-          <SettingIcon />
+          <SettingIcon color="#fff"/>
           Settings
         </Nav.Link>
 
         {/* Logout (Static) */}
         <Nav.Link
           onClick={logOutHandler}
-          className="d-flex align-items-center gap-3 px-4 py-3 text-dark"
+          className="d-flex align-items-center gap-3 px-4 py-3 text-white"
         >
-          <LogoutIcon />
+          <LogoutIcon color="#ff5757"/>
           Logout
         </Nav.Link>
       </Nav>
@@ -165,7 +141,7 @@ const Sidebar = ({ show, onClose }) => {
   return (
     <>
       {/* Desktop */}
-      <div className="d-none py-3 d-md-block">
+      <div className="d-none py-3 d-md-block ">
         <SidebarContent />
       </div>
 
