@@ -16,6 +16,9 @@ import { EditSubModule } from "./pages/submodules/EditSubModule";
 import StepsList from "./pages/steps/StepsList";
 import StepsCreate from "./pages/steps/StepsCreate";
 import StepsUpdate from "./pages/steps/StepsUpdate";
+import { CategoriesList } from "./pages/categories/CategoriesList";
+import SubModuleDetails from "./pages/submodules/SubModuleDetails";
+import CreateCategories from "./pages/categories/CreateCategories";
 
 function App() {
   return (
@@ -32,8 +35,13 @@ function App() {
         <Route path="/module-details" element={<ModuleDetails />} />
 
         <Route path="/sub-module-list" element={<SubmoduleList />} />
+        <Route path="/sub-module-details" element={<SubModuleDetails />} />
         <Route path="/create-sub-module" element={<CreateSubModule />} />
         <Route path="/edit-sub-module" element={<EditSubModule />} />
+
+         <Route path="/category-list" element={<CategoriesList />} />
+        <Route path="/create-categories" element={<CreateCategories />} />
+        {/* <Route path="/edit-sub-module" element={<EditSubModule />} /> */}
         
         <Route path="/university-list" element={<UniversityList />} />
         <Route path="/create-university" element={<CreateUniversity />} />

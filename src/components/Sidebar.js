@@ -95,7 +95,7 @@ const Sidebar = ({ show, onClose }) => {
 
         <Nav.Link
           onClick={() => handleLinkClick("/module-list")}
-          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module") || pathname.startsWith("/sub-module-list") || pathname.startsWith("/create-sub-module") || pathname.startsWith("/edit-sub-module") || pathname.startsWith("/module-details")
+          className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/module-list") || pathname.startsWith("/create-module") || pathname.startsWith("/edit-module") || pathname.startsWith("/sub-module-list") || pathname.startsWith("/create-sub-module") || pathname.startsWith("/edit-sub-module") || pathname.startsWith("/module-details") || pathname.startsWith("/category-list") || pathname.startsWith("/create-categories") || pathname.startsWith("/steps-list") || pathname.startsWith("/steps-create") 
             ? "bg-warning text-white fw-semibold"
             : "text-white"
             }`}
@@ -103,7 +103,7 @@ const Sidebar = ({ show, onClose }) => {
           <BoxIcon color={"#fff"} /> Modules </Nav.Link>
 
         {/* Steps  */}
-        <Nav.Link
+        {/* <Nav.Link
           onClick={() => handleLinkClick("/steps-list")}
           className={`d-flex align-items-center gap-3 px-4 py-3 rounded-5 ${pathname.startsWith("/steps-list") || pathname.startsWith("/steps-create") || pathname.startsWith("/steps-edit")
             ? "bg-warning text-white fw-semibold"
@@ -112,7 +112,7 @@ const Sidebar = ({ show, onClose }) => {
         >
           <StepsIcon color={"#fff"} />
           Assessments
-        </Nav.Link>
+        </Nav.Link> */}
 
         <hr />
 

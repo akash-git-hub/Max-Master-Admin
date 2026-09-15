@@ -340,12 +340,12 @@ const EditModule = () => {
                         <Col md={12} sm={12} xs={12}>
                           
                           <div>
-                            <p className="form-label text-start text-muted">Asset Bundle Url</p>
+                            <p className="form-label text-start text-muted">Asset Bundle</p>
                             <input
                               type="file"
                               className="form-control w-100"
                               name="assets_bundle"
-                              placeholder="asset bundle url"
+                              placeholder="Upload asset bundle"
                               // value={inData?.assets_bundle}
                               onChange={fileHandler}
                             />

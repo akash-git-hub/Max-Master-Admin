@@ -127,11 +127,7 @@ export const CreateSubModule = () => {
       }
     });
     
-    // ------------payload------------------------
-    for (const [key, value] of formData.entries()) {
-      console.log(key, ":", value);
-    }
-
+     
     const res = await createSubModuleAPI(formData);
     if (res.success) {
       successAlert({ message: res.message });
@@ -291,12 +287,12 @@ export const CreateSubModule = () => {
                           <LucideUpload size={40}/>
                          <p className="mb-0 mt-2">Upload Asset Bundle file</p> 
                         </div> */}
-                        <p className="form-label text-start text-muted">Asset Bundle Url</p>
+                        <p className="form-label text-start text-muted">Asset Bundle</p>
                         <input
                           type="file"
                           className="form-control w-100"
                           name="assets_bundle"
-                          placeholder="asset bundle url"
+                          placeholder="Upload asset bundle"
                           // value={inData?.assets_bundle}
                           onChange={fileHandler}
                         />

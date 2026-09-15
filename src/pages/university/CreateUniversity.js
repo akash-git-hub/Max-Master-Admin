@@ -176,7 +176,6 @@ const CreateUniversity = () => {
       setError((prev) => ({ ...prev, no_of_license: "Required!" }));
       isValid = false;
     }
-    console.log("handleSubmit called",error,isValid);
 
     if (!isValid) return;
     setLoading(true);
@@ -200,11 +199,7 @@ const CreateUniversity = () => {
       formData.append("thumbnail", thumbnail); // ✅ FILE
     }
 
-    console.log("FormData entries:");
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ": " + pair[1]);
-    }
-
+    
     const res = await addUniversity(formData);
 
     if (res.success) {

@@ -105,7 +105,11 @@ const ModuleList = () => {
   };
 
   const handleRowClick = (data) => {
-    navigate("/sub-module-list", { state: { data } });
+    if (data?.subModuleCount === 0) {
+      navigate("/category-list", { state: { data } });
+    } else {
+      navigate("/sub-module-list", { state: { data } });
+    }
   };
 
   return (

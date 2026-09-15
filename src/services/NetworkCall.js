@@ -80,6 +80,8 @@ export const loginAPI = async (data) => {
     return await postRequest(path, data);
 };
 
+// -----------------University APIS---------------------- //
+    
 export const getUniversityList = async (page = 1, limit = 15) => {
     const path = `university?page=${page}&limit=${limit}`;
     return await getRequest(path);
@@ -100,6 +102,21 @@ export const deleteUniversityAPI = async ({ id }) => {
     return await deleteRequest(path);
 }
 
+// -----------------Dashboard APIS---------------------- //
+
+export const getDashboardAPI = async () => {
+    const path = `dashboard`;
+    return await getRequest(path);
+} 
+
+export const getUniversityStudentsList = async ({ universityId, limit ,page}) => {
+    const path = `students?university_id=${universityId}&limit=${limit}&page=${page}`;
+    return await getRequest(path);
+}
+
+
+// -----------------Modules APIS---------------------- //
+
 export const getModulesAPI = async (page, limit = 15) => {
     let path;
     if (page) {
@@ -109,11 +126,6 @@ export const getModulesAPI = async (page, limit = 15) => {
     }
     return await getRequest(path);
 }
-
-export const getDashboardAPI = async () => {
-    const path = `dashboard`;
-    return await getRequest(path);
-} 
 
 export const createModuleAPI = async (data) => {
     const path = "modules";
@@ -129,6 +141,9 @@ export const deleteModuleAPI = async ({ id }) => {
     const path = `modules/${id}`;
     return await deleteRequest(path);
 }
+
+
+// -----------------Sub Modules APIS---------------------- //
 
 export const getSubModuleAPI = async ({ moduleId, page }) => {
     const path = `sub-module?module_id=${moduleId}&page=${page}`;
@@ -155,29 +170,55 @@ export const deleteSubModuleAPI = async (id) => {
     return deleteRequest(path);
 }
 
-export const getUniversityStudentsList = async ({ universityId, limit ,page}) => {
-    const path = `students?university_id=${universityId}&limit=${limit}&page=${page}`;
+
+// -----------------Categories APIS---------------------- //
+
+export const getCategoriesAPI = async ({ moduleId, subModuleId, page }) => {
+    let path;
+    if (subModuleId) {
+        path = `categories?module_id=${moduleId}&sub_module_id=${subModuleId}&page=${page}`
+    } else {
+        path = `categories?module_id=${moduleId}&page=${page}`;
+    }
     return await getRequest(path);
 }
+
+export const createCategoriesAPI  = async (data) => {
+    const path = "categories";
+    return postRequest(path, data);
+}
+
+export const updateCategoriesAPI = async ({ id, data }) => {
+    const path = `categories/${id}`;
+    return putRequest(path, data);
+}
+
+export const deleteCategoriesAPI = async (id) => {
+    const path = `categories/${id}`;
+    return deleteRequest(path);
+}
+
+
+// -----------------Steps APIS---------------------- //
 
 export const createStepsAPI = async (data) => {
     const path = "steps";
     return postRequest(path, data);
 }
 
-export const getStepsAPI = async () => {
-    const path = `steps`;
+export const getStepsAPI = async ({categoryId='', page}) => {
+    const path = `steps/${categoryId}?page=${page}`;
     return getRequest(path);
 }
-
-// export const updateStepsAPI = async (data) => {
-//     const path = "steps";
-//     return putRequest(path, data);
-// }
 
 export const updateStepsAPI = async ({id, data}) => {
     const path = `steps/${id}`;
     return putRequest(path, data);
+}
+
+export const deleteStepsAPI = async (id) => {
+    const path = `steps/${id}`;
+    return deleteRequest(path);
 }
 
 export const getStepsDetailAPI = async ({ module_id, sub_module_id="" }) => {

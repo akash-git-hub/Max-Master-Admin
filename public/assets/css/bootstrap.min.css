@@ -483,6 +483,10 @@ tr {
   border-width: 0;
 }
 
+td{
+  vertical-align: top ;
+}
+
 tr {
   border-color: inherit;
   border-style: solid;

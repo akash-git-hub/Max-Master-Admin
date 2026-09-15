@@ -107,7 +107,7 @@ export const SubmoduleList = () => {
   };
 
   const HandleRowClick = (data) => {
-    navigate("/module-details", { state: { data } });
+    navigate("/category-list", { state: { data } });
   };
 
   return (
@@ -212,7 +212,7 @@ export const SubmoduleList = () => {
                             <th className="py-3">S NO</th>
                             <th className="py-3">NAME</th>
                             <th className="py-3">DESCRIPTION</th>
-                            <th className="py-3">SUB MODULES</th>
+                            <th className="py-3">CATEGORIES</th>
                             <th className="py-3">ACTION</th>
                           </tr>
                         </thead>
@@ -233,21 +233,21 @@ export const SubmoduleList = () => {
                                   1}{" "}
                               </td>
 
-                              <td className="py-3 small">{data.name}</td>
+                              <td className="py-3 small">{data?.name}</td>
 
                               <td
                                 className="py-3 small text-truncate"
                                 style={{ maxWidth: 180 }}
                               >
                                 {" "}
-                                {data.description}{" "}
+                                {data?.description}{" "}
                               </td>
 
                               <td
                                 className="py-3 small text-truncate"
                                 style={{ maxWidth: 150 }}
                               >
-                                {data.subModuleCount}
+                                {data?.categoryCount}
                               </td>
 
                               <td className="py-3">

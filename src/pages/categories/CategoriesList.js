@@ -1,58 +1,57 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Loader } from "../../components/Loader";
-import { Button, Col, Container, Form, Row, Stack, Table } from "react-bootstrap";
 import Sidebar from "../../components/Sidebar";
-import { useLocation, useNavigate } from "react-router-dom";
-import { EditIcon, PlusIcon } from "lucide-react";
+import { data, useLocation, useNavigate } from "react-router-dom";
+import { Button, Col, Container, Form, Image, Row, Stack, Table, } from "react-bootstrap";
+import { EditIcon } from "../../Icon/EditIcon";
 import TrashIcon from "../../Icon/TrashIcon";
-import {
-    deleteStepsAPI,
-    getStepsAPI,
-    updateStepsAPI,
-} from "../../services/NetworkCall";
+import Swal from "sweetalert2";
+import { errorAlert, successAlert } from "../../components/Alert";
 import TablePagination from "../../components/TablePagination";
 import { SharedButton } from "../../components/SharedButton";
 import BackArrowIcon from "../../Icon/BackArrowIcon";
-import { errorAlert, successAlert } from "../../components/Alert";
-import Swal from "sweetalert2";
+import { PlusIcon } from "../../Icon/PlusIcon";
+import {
+    deleteCategoriesAPI,
+    getCategoriesAPI,
+    updateCategoriesAPI,
+} from "../../services/NetworkCall";
 
-const StepsList = () => {
-    const navigate = useNavigate();
+export const CategoriesList = () => {
+
     const [loading, setLoading] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
+    const navigate = useNavigate();
     const location = useLocation();
-    const categoryId = location?.state?.data?.id;
-    const predata = location?.state?.data;
+    const subModuleId = location?.state?.data?.id || null ;
+    const moduleId = location?.state?.data?.module?.id || null;
+    const subModuleData = location?.state?.data;
 
-    const [stepsData, setStepsData] = useState([]);
+
+
+    const [categories, setcategories] = useState([]);
     const [pagination, setPagination] = useState({
         currentPage: 1,
         totalPages: 1,
         totalRecord: 0,
-        limit: 10,
+        limit: 15,
     });
 
-    // ---- inline edit state ----
     const [editingId, setEditingId] = useState(null);
-    const [editForm, setEditForm] = useState({
-        name: "",
-        description: "",
-        // key: null,
-        correct_answer: "",
-        is_order_matters: false,
-    });
+    const [editForm, setEditForm] = useState({ name: "", description: "" });
 
-    const fetchSteps = async () => {
+    const fetchCategories = async () => {
         try {
             setLoading(true);
             const payload = {
-                categoryId,
-                page: pagination.currentPage
+                moduleId: !moduleId ? subModuleId : moduleId,
+                ...(moduleId  && { subModuleId }),
+                page: pagination.currentPage,
             }
-            const res = await getStepsAPI(payload);
+            const res = await getCategoriesAPI(payload);
 
             if (res?.success) {
-                setStepsData(res?.data?.results || []);
+                setcategories(res?.data?.results || []);
                 if (res?.data?.pagination) {
                     setPagination((prevPagination) => ({
                         ...prevPagination,
@@ -68,77 +67,54 @@ const StepsList = () => {
         }
     };
 
+
     useEffect(() => {
-        fetchSteps(pagination.currentPage);
-    }, [pagination.currentPage, location]);
+        fetchCategories(pagination.page);
+    }, [pagination.page, location]);
 
     const pageHandler = (page) => {
         setPagination((prevPagination) => ({
             ...prevPagination,
-            currentPage: page,
+            page: page,
         }));
-        fetchSteps(page);
+        fetchCategories(page);
     };
 
-    const handleCreateButtonClick = () => {
-        navigate("/steps-create", { state: { data: predata } });
-    }
-
-    // ---- start inline edit ----
     const editButtonClickHandler = (data) => {
         setEditingId(data.id);
         setEditForm({
             name: data?.name || "",
             description: data?.description || "",
-            // key: data?.key ?? null,
-            correct_answer: Array.isArray(data?.correct_answer)
-                ? data.correct_answer.join(", ")
-                : (data?.correct_answer || ""),
-            is_order_matters: !!data?.is_order_matters,
         });
     };
 
-    const editFieldChangeHandler = (field, value) => {
+    const onChangeHandler = (field, value) => {
         setEditForm((prev) => ({ ...prev, [field]: value }));
     };
 
     const closeEditHandler = () => {
         setEditingId(null);
-        setEditForm({
-            name: "",
-            description: "",
-            key: null,
-            correct_answer: "",
-            is_order_matters: false,
-        });
+        setEditForm({ name: "", description: "" });
     };
 
     const updateHandler = async (id) => {
         try {
-            setLoading(true);
-
             const payload = {
                 name: editForm.name,
                 description: editForm.description,
-                // key: editForm.key,
-                correct_answer: editForm.correct_answer
-                    .split(",")
-                    .map((ans) => ans.trim())
-                    .filter((ans) => ans.length > 0),
-                is_order_matters: editForm.is_order_matters,
             };
-
-            const res = await updateStepsAPI({id, data:payload});
+            setLoading(true);
+            const res = await updateCategoriesAPI({ id, data: payload });
 
             if (res?.success) {
-                successAlert({ message: res.message || "Step updated successfully" });
+                successAlert({ message: res.message || "Category updated successfully" });
                 closeEditHandler();
-                await fetchSteps();
+                await fetchCategories();
             } else {
-                errorAlert({ message: res?.message || "Failed to update step" });
+                errorAlert({ message: res?.message || "Failed to update category" });
             }
         } catch (error) {
-            console.error("Error updating step:", error);
+            console.error("Error updating category:", error);
             errorAlert({ message: "Something went wrong while updating" });
         } finally {
             setLoading(false);
@@ -151,17 +127,17 @@ const StepsList = () => {
             text: "You won't be able to revert this!",
             icon: "warning",
             showCancelButton: true,
-            confirmButtonColor: "#1F0F55",
+            confirmButtonColor: " #1F0F55",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!",
         }).then(async (result) => {
             if (result.isConfirmed) {
                 setLoading(true);
-                const res = await deleteStepsAPI(id);
+                const res = await deleteCategoriesAPI(id);
                 if (res.success) {
                     setLoading(false);
                     successAlert({ message: res.message });
-                    await fetchSteps();
+                    await fetchCategories();
                 } else {
                     setLoading(false);
                     errorAlert({ message: res.message });
@@ -169,6 +145,16 @@ const StepsList = () => {
                 setLoading(false);
             }
         });
+    };
+
+    const subModuleCardClick = () => {
+        navigate("/sub-module-details", { state: { data: subModuleData } });
+    };
+
+    const HandleRowClick = (data) => {
+        // don't navigate while this row is being edited
+        if (editingId === data.id) return;
+        navigate("/steps-list", { state: { data } });
     };
 
     return (
@@ -194,19 +180,34 @@ const StepsList = () => {
                                 BtnTitle={"Back"}
                                 BtnClick={() => window.history.back()}
                             />
-                            <h4 className="fw-bold mb-0 text-start">Category</h4>
+                            <h4 className="fw-bold mb-0 text-start">Sub Module</h4>
                         </Stack>
 
                         <div className="mt-4">
                             {/* Module Info Card */}
-                            <div className="bg-light p-3 rounded-4 shadow-sm cursor-pointer mb-5 col-md-10 col-sm-12" >
-                                <div className="ms-4 text-start flex-grow-1">
-                                    <h5 className="mb-1 fw-bold">Name</h5>
-                                    <h6 className="mb-1 fw-semibold">{predata?.name}</h6>
-                                    <h5 className="mb-1 fw-bold mt-4">Description</h5>
-                                    <p className="mb-1 text-muted text-start">
-                                        {predata?.description}
-                                    </p>
+                            <div
+                                className="bg-light p-3 rounded-4 shadow-sm cursor-pointer mb-5 col-md-10 col-sm-12"
+                                onClick={subModuleCardClick}
+                            >
+                                <div className="d-flex align-items-start">
+                                    {/* Left Image */}
+                                    {subModuleData?.thumbnail !== " " && <Image
+                                        src={subModuleData?.thumbnail}
+                                        alt="University"
+                                        className="rounded-4 object-fit-cover"
+                                        width={150}
+                                        height={150}
+                                    />}
+
+                                    {/* Right Content */}
+                                    <div className="ms-4 text-start flex-grow-1">
+                                        <h5 className="mb-1 fw-bold">Name</h5>
+                                        <h6 className="mb-1 fw-semibold">{subModuleData?.name}</h6>
+                                        <h5 className="mb-1 fw-bold mt-4">Description</h5>
+                                        <p className="mb-1 text-muted text-start">
+                                            {subModuleData?.description}
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -215,12 +216,16 @@ const StepsList = () => {
                                     <div className="table_body">
                                         <div className="d-flex justify-content-between mb-3 algin-items-center">
                                             <h4 className="fw-bold mt-1 text-start">
-                                                Steps List
+                                                Category List
                                             </h4>
                                             <Button
                                                 variant="transparent"
                                                 className="border-0 text-white"
-                                                onClick={handleCreateButtonClick}
+                                                onClick={() => {
+                                                    navigate("/create-categories", {
+                                                        state: { data: subModuleData },
+                                                    });
+                                                }}
                                                 title="Create Categories"
                                             >
                                                 <PlusIcon
@@ -236,6 +241,7 @@ const StepsList = () => {
                                         <div
                                             className="table-responsive rounded-4 overflow-y-auto"
                                             style={{
+                                                // maxHeight: "600px",
                                                 border: "1px solid #eee",
                                             }}
                                         >
@@ -253,7 +259,7 @@ const StepsList = () => {
                                                         <th className="py-3">S NO</th>
                                                         <th className="py-3">NAME</th>
                                                         <th className="py-3">DESCRIPTION</th>
-                                                        <th className="py-3">CORRECT ANSWER</th>
+                                                        <th className="py-3">STEPS</th>
                                                         <th className="py-3">ACTION</th>
                                                     </tr>
                                                 </thead>
@@ -261,12 +267,13 @@ const StepsList = () => {
                                                 {/* Body */}
 
                                                 <tbody className="text-center">
-                                                    {stepsData.map((data, index) => {
+                                                    {categories.map((data, index) => {
                                                         const isEditing = editingId === data.id;
 
                                                         return (
                                                             <tr
                                                                 key={index}
+                                                                onClick={() => HandleRowClick(data)}
                                                                 className={
                                                                     isEditing
                                                                         ? "table-row-editing"
@@ -281,23 +288,15 @@ const StepsList = () => {
                                                                         1}{" "}
                                                                 </td>
 
-                                                                <td
-                                                                    className="py-3 small text-wrap"
-                                                                    style={{
-                                                                        minWidth: 160,
-                                                                         maxWidth: isEditing ? 260 : 180,
-                                                                        verticalAlign: "top",
-                                                                    }}
-                                                                >
+                                                                <td className="py-3 small justify-content-start" style={{ minWidth: 160, }}>
                                                                     {isEditing ? (
                                                                         <Form.Control
-                                                                           as="textarea"
-                                                                            rows={3}
                                                                             size="sm"
+                                                                            type="text"
                                                                             value={editForm.name}
                                                                             onClick={(e) => e.stopPropagation()}
                                                                             onChange={(e) =>
-                                                                                editFieldChangeHandler("name", e.target.value)
+                                                                                onChangeHandler("name", e.target.value)
                                                                             }
                                                                             autoFocus
                                                                         />
@@ -312,11 +311,7 @@ const StepsList = () => {
                                                                             ? "py-3 small"
                                                                             : "py-3 small text-truncate"
                                                                     }
-                                                                    style={{
-                                                                        maxWidth: isEditing ? 260 : 180,
-                                                                        minWidth: isEditing ? 200 : undefined,
-                                                                        verticalAlign:  "top" ,
-                                                                    }}
+                                                                    style={{ maxWidth: isEditing ? 260 : 180, minWidth: isEditing ? 200 : undefined }}
                                                                 >
                                                                     {isEditing ? (
                                                                         <Form.Control
@@ -326,7 +321,7 @@ const StepsList = () => {
                                                                             value={editForm.description}
                                                                             onClick={(e) => e.stopPropagation()}
                                                                             onChange={(e) =>
-                                                                                editFieldChangeHandler(
+                                                                                onChangeHandler(
                                                                                     "description",
                                                                                     e.target.value
                                                                                 )
@@ -338,46 +333,20 @@ const StepsList = () => {
                                                                 </td>
 
                                                                 <td
-                                                                    className={
-                                                                        isEditing
-                                                                            ? "py-3 small"
-                                                                            : "py-3 small text-truncate"
-                                                                    }
-                                                                    style={{
-                                                                        maxWidth: isEditing ? 220 : 150,
-                                                                        minWidth: isEditing ? 180 : undefined,
-                                                                        verticalAlign: isEditing ? "top" : "middle",
-                                                                    }}
+                                                                    className="py-3 small text-truncate"
+                                                                    style={{ maxWidth: 150 }}
                                                                 >
-                                                                    {isEditing ? (
-                                                                        <Form.Control
-                                                                            size="sm"
-                                                                            type="text"
-                                                                            placeholder="Comma separated e.g. Healthy, Active"
-                                                                            value={editForm.correct_answer}
-                                                                            onClick={(e) => e.stopPropagation()}
-                                                                            onChange={(e) =>
-                                                                                editFieldChangeHandler(
-                                                                                    "correct_answer",
-                                                                                    e.target.value
-                                                                                )
-                                                                            }
-                                                                        />
-                                                                    ) : Array.isArray(data?.correct_answer) ? (
-                                                                        data.correct_answer.join(", ")
-                                                                    ) : (
-                                                                        data?.correct_answer
-                                                                    )}
+                                                                    {data?.stepsCount}
                                                                 </td>
 
-                                                                <td className="py-3" style={{ verticalAlign: isEditing ? "top" : "middle" }}>
+                                                                <td className="py-3">
                                                                     {isEditing ? (
                                                                         <div
                                                                             className="d-flex justify-content-center align-items-center gap-2"
                                                                             onClick={(e) => e.stopPropagation()}
                                                                         >
                                                                             <SharedButton
-                                                                                BtnClick={() => updateHandler(data.id)}
+                                                                                BtnClick={() => updateHandler(data?.id)}
                                                                                 BtnType={'button'}
                                                                                 BtnVariant={'dark'}
                                                                                 BtnLabel={'Update'}
@@ -397,7 +366,6 @@ const StepsList = () => {
                                                                     ) : (
                                                                         <div className="d-flex justify-content-center align-items-center gap-3">
                                                                             <EditIcon
-                                                                                size={18}
                                                                                 className={"text-dark cursor-pointer"}
                                                                                 onClick={(e) => {
                                                                                     e.stopPropagation();
@@ -409,7 +377,7 @@ const StepsList = () => {
                                                                                 className="text-danger cursor-pointer"
                                                                                 onClick={(e) => {
                                                                                     e.stopPropagation();
-                                                                                    deleteHandler(data?.id);
+                                                                                    deleteHandler(data.id);
                                                                                 }}
                                                                             />
                                                                         </div>
@@ -426,7 +394,7 @@ const StepsList = () => {
                                             onPageChange={pageHandler}
                                             currentPage={pagination?.currentPage}
                                             totalPages={pagination?.totalPages}
-                                            numberOfRecordsOnCurrentPage={stepsData?.length}
+                                            numberOfRecordsOnCurrentPage={categories?.length}
                                             limit={pagination?.limit}
                                             totalRecord={pagination?.totalRecord}
                                         />
@@ -440,5 +408,3 @@ const StepsList = () => {
         </>
     );
 };
-
-export default StepsList;

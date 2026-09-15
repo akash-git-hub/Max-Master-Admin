@@ -7,34 +7,31 @@ import Sidebar from "../../components/Sidebar";
 import { useLocation, useNavigate } from "react-router-dom";
 import { PlusIcon, Trash2 } from "lucide-react";
 import { errorAlert, successAlert } from "../../components/Alert";
-import { createStepsAPI } from "../../services/NetworkCall";
+import { createCategoriesAPI, createStepsAPI, getAllSubModuleAPI, getModulesAPI } from "../../services/NetworkCall";
 
-const StepsCreate = () => {
+const CreateCategories = () => {
+    const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
     const [showSidebar, setShowSidebar] = useState(false);
     const location = useLocation();
     const predata = location?.state?.data;
 
-
-    // Form Data — category_id comes from the category this page was opened from
-    const [formData, setFormData] = useState({
-        category_id: null,
-        steps: [
-            { name: "", description: "", correct_answer: "", is_order_matters: false }
-        ]
-    });
+    // Form Data
+    const [formData, setFormData] = useState({  module_id: null, sub_module_id: null,  steps: [  { name: "", description: "" } ] });
 
     const [errors, setErrors] = useState({
-        category_id: "",
-        steps: "",
+        module_id: "",
+        sub_module_id: "",
+        steps: ""
     });
 
     useEffect(() => {
         if (predata?.id) {
-            setFormData(prev => ({ ...prev, category_id: predata?.id }));
+             setFormData(prev => ({ ...prev, module_id: predata?.module?.id  }));
+             setFormData(prev => ({ ...prev, sub_module_id: predata?.id  }));
         }
-    }, [predata]);
-
+    }, [predata])
+    
 
     // Add New Step
     const addStep = () => {
@@ -42,7 +39,7 @@ const StepsCreate = () => {
             ...prev,
             steps: [
                 ...prev.steps,
-                { name: "", description: "", correct_answer: "", is_order_matters: false }
+                { name: "", description: "" }
             ]
         }));
         setErrors(prev => ({ ...prev, steps: "" }));
@@ -58,30 +55,22 @@ const StepsCreate = () => {
         }));
     };
 
-    // Handle Step Input Change (text/textarea fields)
+    // Handle Step Input Change
     const handleStepChange = (index, field, value) => {
         const updatedSteps = [...formData.steps];
         updatedSteps[index][field] = value;
         setFormData(prev => ({ ...prev, steps: updatedSteps }));
     };
 
-    // Handle checkbox change for is_order_matters
-    const handleOrderMattersChange = (index, checked) => {
-        const updatedSteps = [...formData.steps];
-        updatedSteps[index].is_order_matters = checked;
-        setFormData(prev => ({ ...prev, steps: updatedSteps }));
-    };
-
-    // Form Validation - Step name required
+    // Form Validation - Only Module and Step Name required
     const validateForm = () => {
         let isValid = true;
-        const newErrors = { category_id: "", steps: "" };
+        const newErrors = { module_id: "", sub_module_id: "", steps: "" };
+ 
 
-        if (!formData.category_id) {
-            newErrors.category_id = "Category is required";
-            isValid = false;
-        }
+        // Sub Module is now optional → No validation for it
 
+        // Check Step Names
         const hasEmptyName = formData.steps.some(step => !step.name.trim());
         if (hasEmptyName) {
             newErrors.steps = "Step name is required for all steps";
@@ -92,33 +81,33 @@ const StepsCreate = () => {
         return isValid;
     };
 
+
     // Submit Handler
     const handleSubmit = async (e) => {
+
         e.preventDefault();
         if (!validateForm()) return;
 
         setLoading(true);
 
         const payload = {
-            category_id: formData.category_id,
-            steps: formData.steps.map((step) => ({
+            module_id: formData.module_id,
+            sub_module_id: formData.sub_module_id || null,   // Send null if empty
+            categories: formData.steps.map((step, index) => ({
+                // step_number: index + 1,
                 name: step.name.trim(),
-                description: step.description ? step.description.trim() : "",
-                correct_answer: step.correct_answer
-                    ? step.correct_answer.split(",").map(ans => ans.trim()).filter(ans => ans.length > 0)
-                    : [],
-                is_order_matters: !!step.is_order_matters
+                description: step.description ? step.description.trim() : null
             }))
         };
 
 
-        const res = await createStepsAPI(payload);
+        const res = await createCategoriesAPI(payload);
 
         if (res.success) {
-            successAlert({ message: "Steps created successfully" });
+            successAlert({ message: "Category created successfully" });
             window.history.back();
         } else {
-            errorAlert({ message: res?.message || "Failed to create Steps" });
+            errorAlert({ message: res?.message || "Failed to create Assessments" });
         }
 
         setLoading(false);
@@ -144,28 +133,30 @@ const StepsCreate = () => {
                                 BtnTitle={"Back"}
                                 BtnClick={() => window.history.back()}
                             />
-                            <h4 className="fw-bold mb-0 text-start">Create Steps</h4>
+                            <h4 className="fw-bold mb-0 text-start">Create Categories</h4>
                         </Stack>
 
                         <Form onSubmit={handleSubmit}>
                             <div className="p-4 rounded-4 text-start">
-                                <Row>
+                                 <Row>
                                     <Col md={6}>
-                                        <div className="text-start mb-3">
-                                            <strong>Category : </strong> {predata?.name || "Loading..."}
-                                        </div>
-                                         {/* <div className="text-start">
-                                                <strong>Description</strong> {predata?.description || ""}
-                                            </div> */}
-                                    </Col>
-                                   
-                                </Row>
-                                {errors.category_id && <p className="text-danger mt-2 mb-0">{errors.category_id}</p>}
+                                        <div className="text-start">
+                                            <strong>Module:</strong> {predata?.module?.name ? predata?.module?.name : "Loading..."}
+                                            </div>
+                            </Col>
+                            {predata.id && (
+                                        <Col md={6}>
+                                             <div className="text-start">
+                                                <strong>Sub Module:</strong> {predata?.name || ""}
+                                                </div>
+                                </Col>
+                            )}
+                            </Row>
 
                                 {/* Steps Section */}
                                 <div className="mt-5">
                                     <div className="d-flex justify-content-between align-items-center mb-3">
-                                        <h5 className="fw-bold mb-0">Steps</h5>
+                                        <h5 className="fw-bold mb-0">Categories</h5>
                                         <Button variant="dark" onClick={addStep} className="d-flex align-items-center gap-2">
                                             <PlusIcon size={18} />
                                         </Button>
@@ -177,10 +168,8 @@ const StepsCreate = () => {
                                         <thead className="table-light">
                                             <tr>
                                                 <th style={{ width: "50px" }}>#</th>
-                                                <th>Step Name <span className="text-danger">*</span></th>
+                                                <th>Category Name <span className="text-danger">*</span></th>
                                                 <th>Description (Optional)</th>
-                                                <th>Correct Answer(s)</th>
-                                                <th style={{ width: "110px" }}>Order Matters</th>
                                                 <th style={{ width: "90px" }}>Action</th>
                                             </tr>
                                         </thead>
@@ -207,29 +196,14 @@ const StepsCreate = () => {
                                                         />
                                                     </td>
                                                     <td>
-                                                        <Form.Control
-                                                            type="text"
-                                                            value={step.correct_answer}
-                                                            placeholder="Comma separated e.g. Healthy, Active"
-                                                            onChange={(e) => handleStepChange(index, "correct_answer", e.target.value)}
-                                                        />
-                                                    </td>
-                                                    <td className="text-center">
-                                                        <Form.Check
-                                                            type="checkbox"
-                                                            checked={step.is_order_matters}
-                                                            onChange={(e) => handleOrderMattersChange(index, e.target.checked)}
-                                                        />
-                                                    </td>
-                                                    <td>
                                                         {index !== 0 && (
-                                                            <SharedButton
-                                                                BtnVariant={'transparent'}
-                                                                BtnSize={'sm'}
-                                                                BtnLabel={<Trash2 size={25} color="red" />}
-                                                                BtnClick={() => removeStep(index)}
-                                                                BtnClass={"p-3 w-100 border-0"}
-                                                            />
+                                                                <SharedButton
+                                                                    BtnVariant={'transparent'}
+                                                                    BtnSize={'sm'}
+                                                                    BtnLabel={<Trash2 size={25} color="red" />}
+                                                                    BtnClick={() => removeStep(index)}
+                                                                    BtnClass={"p-3 w-100 border-0"}
+                                                                /> 
                                                         )}
                                                     </td>
                                                 </tr>
@@ -239,13 +213,30 @@ const StepsCreate = () => {
                                 </div>
 
                                 {/* Submit Button */}
-                                <SharedButton
-                                    BtnType={'submit'}
-                                    BtnClass={'col-md-4 col-12'}
-                                    BtnVariant={'dark'}
-                                    BtnSize={"md"}
-                                    BtnLabel={"Submit"}
-                                />
+                                {/* <div className="mt-4 w-25"> */}
+                                    <SharedButton
+                                        BtnType={'submit'}
+                                        BtnClass={'col-md-4 col-12'}
+                                        BtnVariant={'dark'}
+                                        BtnSize={"md"}
+                                        BtnLabel={"Submit"}
+                                    />
+                                    {/* <Button
+                                        type="submit"
+                                        className="w-100"
+                                        variant="dark"
+                                        size="md"
+                                        style={{
+                                            border: "none",
+                                            padding: "14px 60px",
+                                            borderRadius: "30px",
+                                            fontSize: 16,
+                                            fontWeight: 600,
+                                        }}
+                                    >
+                                        Submit
+                                    </Button> */}
+                                {/* </div> */}
                             </div>
                         </Form>
                     </Container>
@@ -255,4 +246,4 @@ const StepsCreate = () => {
     );
 };
 
-export default StepsCreate;
+export default CreateCategories;
