@@ -77,7 +77,6 @@ const StepsList = () => {
             ...prevPagination,
             currentPage: page,
         }));
-        fetchSteps(page);
     };
 
     const handleCreateButtonClick = () => {
